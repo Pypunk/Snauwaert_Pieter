@@ -111,13 +111,9 @@ void OnMouseDownEvent(const SDL_MouseButtonEvent& e)
 		{
 			if (g_Clicked)
 			{
-				g_Clicked = false;
 				CreateRectangle();
 			}
-			else
-			{
-				g_Clicked = true;
-			}
+			g_Clicked = !g_Clicked;
 		}
 		break;
 	}

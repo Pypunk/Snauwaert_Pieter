@@ -14,7 +14,7 @@ float g_WindowHeight{ 300 };
 #pragma region ownDeclarations
 // Declare your own global variables here
 Rectf g_Bomb{};
-Point2f mousePos{};
+Point2f g_MousePos{};
 Color4f g_Color{};
 bool g_Clicked;
 int g_NrFrames{};

@@ -74,8 +74,8 @@ void OnKeyUpEvent(SDL_Keycode key)
 void OnMouseMotionEvent(const SDL_MouseMotionEvent& e)
 {
 	//std::cout << "  [" << e.x << ", " << e.y << "]\n";
-	mousePos.x = float(e.x);
-	mousePos.y = float(g_WindowHeight - e.y);
+	g_MousePos.x = float(e.x);
+	g_MousePos.y = float(g_WindowHeight - e.y);
 }
 
 void OnMouseDownEvent(const SDL_MouseButtonEvent& e)
@@ -83,10 +83,7 @@ void OnMouseDownEvent(const SDL_MouseButtonEvent& e)
 	switch (e.button)
 	{
 	case SDL_BUTTON_LEFT:
-		if (IsPointInRect(mousePos, g_Bomb))
-		{
-			g_Clicked = true;
-		}
+		g_Clicked = IsPointInRect(g_MousePos, g_Bomb);
 		break;
 	}
 }
