@@ -76,6 +76,15 @@ void OnKeyDownEvent(SDL_Keycode key)
 			}			break;
 		}
 	}
+	else
+	{
+		switch (key)
+		{
+		case SDLK_r:
+			ResetGame();
+			break;
+		}
+	}
 }
 
 void OnKeyUpEvent(SDL_Keycode key)
@@ -210,6 +219,16 @@ void CheckWin()
 		}
 
 	}
+}
+void ResetGame()
+{
+	g_Amount = 21;
+	g_PlayerAmount = 0;
+	g_CpuAmount = 0;
+	g_PlayerAmountString = "";
+	g_cpuAmountString = "";
+	g_Player = PlayerState::player;
+	g_LastPlayer = PlayerState::player;
 }
 int GenerateRandomInt(int min, int max)
 {

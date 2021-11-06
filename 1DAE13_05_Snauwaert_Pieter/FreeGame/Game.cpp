@@ -40,7 +40,7 @@ void Update(float elapsedSec)
 	}
 	if (g_Ball.center.x < 0)
 	{
-		g_CounterPlayer1++;
+		g_CounterPlayer2++;
 		std::cout << "Player2: " << g_CounterPlayer2 << std::endl;
 		CreateBall();
 	}

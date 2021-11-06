@@ -15,7 +15,6 @@ float g_WindowHeight{ 300 };
 // Declare your own global variables here
 int g_Amount{21};
 int g_PlayerAmount{};
-int g_PlayerTempAmount{};
 int g_PlayerAmountIn{};
 int g_CpuAmount{};
 enum class PlayerState
@@ -33,6 +32,7 @@ void DrawMatches();
 void DrawMatchesPlayers();
 void UpdateAmounts();
 void CheckWin();
+void ResetGame();
 int GenerateRandomInt(int min, int max);
 #pragma endregion ownDeclarations
 
