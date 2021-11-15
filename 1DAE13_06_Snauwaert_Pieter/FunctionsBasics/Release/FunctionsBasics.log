@@ -1,0 +1,8 @@
+﻿  pch.cpp
+  FunctionsBasics.cpp
+D:\School\Programming_01\Snauwaert_Pieter\1DAE13_06_Snauwaert_Pieter\FunctionsBasics\FunctionsBasics.cpp(97,7): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 31 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  FunctionsBasics.vcxproj -> D:\School\Programming_01\Snauwaert_Pieter\1DAE13_06_Snauwaert_Pieter\FunctionsBasics\Release\FunctionsBasics.exe
