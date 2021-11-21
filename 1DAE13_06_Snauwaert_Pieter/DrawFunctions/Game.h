@@ -21,6 +21,8 @@ void DrawEguilateralTriangle(Point2f position, float size, bool filled = true);
 void TestDrawTriangles();
 void DrawPentagram(Point2f center, float radius);
 void TestDrawPentagram();
+void DrawRadiantRect(Point2f position, float width, float height, Color4f startColor, Color4f endColor);
+void TestDrawRadiantRect();
 #pragma endregion ownDeclarations
 
 #pragma region gameFunctions											
