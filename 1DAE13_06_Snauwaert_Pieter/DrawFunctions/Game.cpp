@@ -17,6 +17,7 @@ void Draw()
 	TestDrawTriangles();
 	TestDrawPentagram();
 	TestDrawRadiantRect();
+	TestDrawDotGrid();
 }
 
 void Update(float elapsedSec)
@@ -112,6 +113,7 @@ void DrawSquares(Point2f position, float squareSize, float amount)
 		newSize -= squareSize / amount;
 	}
 }
+
 void TestDrawSquares()
 {
 	float squareWidth{ 100 };
@@ -130,21 +132,27 @@ void TestDrawSquares()
 	amount = 4;
 	DrawSquares(position, squareWidth, amount);
 }
-void DrawEguilateralTriangle(Point2f position, float size, bool filled)
+
+void DrawEguilateralTriangle(Point2f position, float size, bool isFilled)
 {
-	if (filled)
+	const float angle{ 60.f };
+	const Point2f position2{ CreateCoordinatesFromRads(size, ConvertToRadians(angle), position) };
+	const Point2f position3{ position.x + size,position.y };
+	if (isFilled)
 	{
-		FillTriangle(position, Point2f{ position.x + size,position.y }, Point2f{ position.x + size/2,position.y + size });
+		FillTriangle(position, position2, position3);
 	}
 	else
 	{
-		DrawTriangle(position, Point2f{ position.x + size,position.y }, Point2f{ position.x + size/2,position.y + size });
+		DrawTriangle(position, position2, position3);
 	}
 }
+
 void TestDrawTriangles()
 {
-	float size{ 50.f };
+	float size{ 60.f };
 	float offSet{ 10.f };
+	const float angle{ 60.f };
 	Point2f trianglePos{ g_WindowWidth / 2,g_WindowHeight-size-offSet };
 	for (int i{}; i < 3; ++i)
 	{
@@ -162,10 +170,10 @@ void TestDrawTriangles()
 		}
 		DrawEguilateralTriangle(trianglePos, size);
 		trianglePos.x += offSet;
-		trianglePos.y += offSet;
+		trianglePos.y += offSet/2;
 		size -= 20.f;
 	}
-	size = 25;
+	size = 30.f;
 	trianglePos = Point2f{ g_WindowWidth / 2+size*2+10.f,g_WindowHeight - size*2 - offSet };
 	for (int i{}; i < 3; ++i)
 	{
@@ -174,12 +182,12 @@ void TestDrawTriangles()
 		{
 		case 1:
 			trianglePos.x += size / 2;
-			trianglePos.y += size;
+			trianglePos.y = CreateCoordinatesFromRads(size, ConvertToRadians(angle), trianglePos).y;
 			SetColor(1, 0, 1, 1);
 			break;
 		case 2:
 			trianglePos.x += size / 2;
-			trianglePos.y -= size;
+			trianglePos.y = g_WindowHeight - size * 2 - offSet;
 			SetColor(1, 1, 0, 1);
 			break;
 		}
@@ -188,6 +196,7 @@ void TestDrawTriangles()
 		DrawEguilateralTriangle(trianglePos, size, false);
 	}
 }
+
 void DrawPentagram(Point2f center, float radius)
 {
 	std::vector<Point2f> pentaPoints{};
@@ -198,6 +207,7 @@ void DrawPentagram(Point2f center, float radius)
 	pentaPoints.push_back(Point2f{ cosf(2 * g_Pi / 5 * 4) * radius + center.x,sinf(2 * g_Pi / 5 * 4) * radius + center.y });
 	DrawPolygon(pentaPoints);
 }
+
 void TestDrawPentagram()
 {
 	float radius{ 30.f };
@@ -210,60 +220,102 @@ void TestDrawPentagram()
 	SetColor(0, 0, 1, 1);
 	DrawPentagram(center, radius);
 }
+
 void DrawRadiantRect(Point2f position, float width, float height, Color4f startColor, Color4f endColor)
 {
-	const float gradientIncrement{ 0.025f };
+	const float gradientIncrement{ 1.f/width };
 	for (int i{}; i < width; ++i)
 	{
 		SetColor(startColor);
 		DrawLine(position, Point2f{ position.x,position.y + height });
 		if (startColor.r < endColor.r)
 		{
-			startColor.r += gradientIncrement / width * i;
+			startColor.r += gradientIncrement;
 		}
 		else
 		{
-			startColor.r -= gradientIncrement / width * i;
+			startColor.r -= gradientIncrement;
 		}
 		if (startColor.g < endColor.g)
 		{
-			startColor.g += gradientIncrement / width * i;;
+			startColor.g += gradientIncrement;
 		}
 		else
 		{
-			startColor.g -= gradientIncrement / width * i;;
+			startColor.g -= gradientIncrement;
 		}
 		if (startColor.b < endColor.b)
 		{
-			startColor.b += gradientIncrement / width * i;;
+			startColor.b += gradientIncrement;
 		}
 		else
 		{
-			startColor.b -= gradientIncrement / width * i;;
+			startColor.b -= gradientIncrement;;
 		}
 		if (startColor.a < endColor.a)
 		{
-			startColor.a += gradientIncrement / width * i;;
+			startColor.a += gradientIncrement;
 		}
 		else
 		{
-			startColor.a -= gradientIncrement / width * i;;
+			startColor.a -= gradientIncrement;
 		}
 		position.x++;
 	}
 }
+
 void TestDrawRadiantRect()
 {
 	const Color4f black{ 0,0,0,1 };
 	const Color4f white{ 1,1,1,1 };
-	DrawRadiantRect(Point2f{ 0,0 }, 100.f, 20.f, black, white);
+	DrawRadiantRect(Point2f{ 0,g_WindowHeight/2+60 }, 150.f, 20.f, black, white);
 	const Color4f red{ 1,0,0,1 };
 	const Color4f purple{ 1,0,1,1 };
-	DrawRadiantRect(Point2f{ 0,30.f }, 200.f, 40.f, red, purple);
+	DrawRadiantRect(Point2f{ 0,g_WindowHeight/2+20.f }, 170.f, 30.f, red, purple);
 	const Color4f yellow{ 1,0.7f,0.6f,1 };
 	const Color4f orange{ 1,0.7f,0,1 };
-	DrawRadiantRect(Point2f{ 0,80.f }, 200.f, 40.f, yellow, orange);
+	DrawRadiantRect(Point2f{ 0,g_WindowHeight/2-20.f }, 200.f, 30.f, yellow, orange);
 	const Color4f blue{ 0,0,1,1 };
-	DrawRadiantRect(Point2f{ 0,130.f }, 300.f, 40.f, blue, red);
+	const Color4f redTrans(1, 0, 0, 0);
+	DrawRadiantRect(Point2f{ 0,g_WindowHeight/2-60.f }, 200.f, 30.f, blue, redTrans);
+}
+
+void DrawDotGrid(Point2f position, float radius, float offSet, float cols, float rows)
+{
+	float startYpos{ position.y };
+	for (int i{}; i < cols; ++i)
+	{
+		for (int j{}; j < rows; ++j)
+		{
+			FillEllipse(position, radius, radius);
+			position.y += radius*2 + offSet;
+		}
+		position.y = startYpos;
+		position.x += radius * 2 + offSet;
+	}
+}
+
+void TestDrawDotGrid()
+{
+	Point2f position{ 20,50 };
+	SetColor(1, 0, 0, 1);
+	DrawDotGrid(position, 15, 0, 5, 3);
+	SetColor(0, 1, 0, 1);
+	position.x = g_WindowWidth / 2-20;
+	DrawDotGrid(position, 15, 0, 7, 2);
+	SetColor(0, 0, 1, 1);
+	DrawDotGrid(position, 7.5, 15, 7, 2);
+}
+
+float ConvertToRadians(float degrees)
+{
+	return degrees * (g_Pi / 180);
+}
+
+Point2f CreateCoordinatesFromRads(float radius, float radians, Point2f offset)
+{
+	float x = offset.x + (radius * cosf(radians));
+	float y = offset.y + (radius * sinf(radians));
+	return Point2f{ x, y };
 }
 #pragma endregion ownDefinitions

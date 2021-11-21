@@ -6,7 +6,7 @@ std::string g_WindowTitle{ "Project name - Name, firstname - 1DAExx" };
 
 // Change the window dimensions here
 float g_WindowWidth{ 500 };
-float g_WindowHeight{ 300 };
+float g_WindowHeight{ 500 };
 #pragma endregion gameInformation
 
 
@@ -17,12 +17,16 @@ float g_WindowHeight{ 300 };
 // Declare your own functions here
 void DrawSquares(Point2f position, float squareSize, float amount);
 void TestDrawSquares();
-void DrawEguilateralTriangle(Point2f position, float size, bool filled = true);
+void DrawEguilateralTriangle(Point2f position, float size, bool isFilled = true);
 void TestDrawTriangles();
 void DrawPentagram(Point2f center, float radius);
 void TestDrawPentagram();
 void DrawRadiantRect(Point2f position, float width, float height, Color4f startColor, Color4f endColor);
 void TestDrawRadiantRect();
+void DrawDotGrid(Point2f position, float radius, float offSet, float cols, float rows);
+void TestDrawDotGrid();
+float ConvertToRadians(float degrees);
+Point2f CreateCoordinatesFromRads(float radius, float radians, Point2f offset);
 #pragma endregion ownDeclarations
 
 #pragma region gameFunctions											
