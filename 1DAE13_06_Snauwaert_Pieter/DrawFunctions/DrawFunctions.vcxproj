@@ -154,7 +154,6 @@
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="myUtils.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -167,7 +166,6 @@
   <ItemGroup>
     <ClInclude Include="Core.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="myUtils.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="structs.h" />
     <ClInclude Include="utils.h" />
