@@ -136,6 +136,16 @@ namespace utils
 		DrawEllipse(ellipse.center.x, ellipse.center.y, ellipse.radiusX, ellipse.radiusY, lineWidth);
 	}
 
+	void DrawCircle(const Point2f& center, float rad, float lineWidth)
+	{
+		DrawEllipse(center, rad, rad, lineWidth);
+	}
+
+	void DrawCircle(const Circlef& circle, float lineWidth)
+	{
+		DrawCircle(circle.center, circle.radius, lineWidth);
+	}
+
 	void FillEllipse(float centerX, float centerY, float radX, float radY)
 	{
 		float dAngle{ radX > radY ? float(g_Pi / radX) : float(g_Pi / radY) };
@@ -158,6 +168,16 @@ namespace utils
 	void FillEllipse(const Point2f& center, float radX, float radY)
 	{
 		FillEllipse(center.x, center.y, radX, radY);
+	}
+
+	void FillCircle(const Point2f& center, float rad)
+	{
+		FillEllipse(center, rad, rad);
+	}
+
+	void FillCircle(const Circlef& circle)
+	{
+		FillCircle(circle.center, circle.radius);
 	}
 
 	void DrawArc(float centerX, float centerY, float radX, float radY, float fromAngle, float tillAngle, float lineWidth)
@@ -492,7 +512,69 @@ namespace utils
 
 
 #pragma region CollisionFunctionality
+	float GetDistance(Point2f point1, Point2f point2)
+	{
+		return sqrtf(powf(point2.x - point1.x, 2) + powf(point2.y - point1.y, 2));
+	}
+	float GetDistance(float p1x, float p1y, float p2x, float p2y)
+	{
+		return sqrtf(powf(p2x - p1x, 2) + powf(p2y - p1y, 2));
+	}
+	bool IsPointInCircle(const Point2f& p, const Circlef& c)
+	{
+		return (p.x >= c.center.x - c.radius && p.x <= c.center.x + c.radius
+			&& p.y >= c.center.y - c.radius && p.y <= c.center.y + c.radius);
+	}
+	bool IsPointInRect(const Point2f& p, const Rectf& r)
+	{
+		return (p.x >= r.left && p.x <= r.left + r.width &&
+			p.y >= r.bottom && p.y <= r.bottom + r.height);
+	}
+	bool IsOverlapping(const Rectf& rect1, const Rectf& rect2)
+	{
+		Point2f topLeftPos1{ rect1.left,rect1.bottom+rect1.height };
+		Point2f bottomRightPos1{ rect1.left + rect1.width,rect1.bottom };
+		Point2f topLeftPos2{ rect2.left,rect2.bottom+rect2.height };
+		Point2f bottomRightPos2{ rect2.left + rect2.width,rect2.bottom };
+		
+		if (topLeftPos1.x == bottomRightPos1.x || topLeftPos1.y == bottomRightPos1.y
+			|| topLeftPos2.x == bottomRightPos1.x || topLeftPos2.y == bottomRightPos2.y)return false;
+		if (topLeftPos1.x >= bottomRightPos2.x || topLeftPos2.x >= bottomRightPos1.x)return false;
+		if (bottomRightPos1.y >= topLeftPos2.y || bottomRightPos2.y >= topLeftPos1.y)return false;
 
-
+		return true;
+	}
+	bool IsOverLapping(const Circlef& c1, const Circlef& c2)
+	{
+		const float distance{ GetDistance(c1.center,c2.center)*GetDistance(c1.center,c2.center) };
+		const float radSquared{ powf((c1.radius + c2.radius),2) };
+		return (distance < radSquared);
+	}
 #pragma endregion CollisionFunctionality
+
+#pragma region OwnFunctions
+	int GetRandInt(int min, int max)
+	{
+		return ((rand() % int(max)) + min);
+	}
+
+	float GetRandFloat(float min, float max)
+	{
+		return ((rand() % int(max * 100)) + min * 100) / 100;
+	}
+	float ConvertToRadians(float degrees)
+	{
+		return degrees * (g_Pi / 180);
+	}
+	float ConvertToDegrees(float radians)
+	{
+		return radians * (180 / g_Pi);
+	}
+	Point2f CreateCoordinatesFromRads(float radius, float radians, const Point2f& offset)
+	{
+		const float x = offset.x + (radius * cosf(radians));
+		const float y = offset.y + (radius * sinf(radians));
+		return Point2f{ x, y };
+	}
+#pragma endregion OwnFunctions
 }

@@ -6,9 +6,10 @@
 void Start()
 {
 	// initialize game resources here
-	g_TestCircle = Circlef{ Point2f{float(rand() % int(g_WindowWidth)),float(rand() % int(g_WindowHeight))},50 };
+	const float radius{ 50 };
 	const float width{ 120.f };
-	g_TestRect = Rectf{ float(rand() % int(g_WindowWidth-width*2)),float(rand() % int(g_WindowWidth-width*2)),width,width/2 };
+	g_TestCircle = Circlef{ Point2f{GetRandFloat(radius,g_WindowWidth - radius * 2),GetRandFloat(radius,g_WindowHeight - radius * 2)},50 };
+	g_TestRect = Rectf{ GetRandFloat(width,g_WindowWidth-width),GetRandFloat(width,g_WindowHeight-width),width,width/2 };
 }
 
 void Draw()
@@ -28,7 +29,7 @@ void Draw()
 		SetColor(1, 0, 0, 1);
 		DrawRect(g_TestRect, 2.f);
 	}
-	if (IsOverlapping(g_TestRect, g_MouseRect))
+	if (IsOverlapping(g_MouseRect, g_TestRect))
 	{
 		SetColor(1, 0, 0, 0.5);
 		FillRect(g_MouseRect);
@@ -38,7 +39,7 @@ void Draw()
 		SetColor(0, 1, 0, 0.5);
 		FillRect(g_MouseRect);
 	}
-	if (IsOverLapping(g_MouseCircle, g_TestCircle))
+	if (IsOverLapping(g_TestCircle, g_MouseCircle))
 	{
 		SetColor(1, 0, 0, 0.5);
 		FillCircle(g_MouseCircle);

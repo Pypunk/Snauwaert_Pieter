@@ -33,9 +33,13 @@ namespace utils
 	void DrawEllipse(float centerX, float centerY, float radX, float radY, float lineWidth = 1.0f);
 	void DrawEllipse(const Point2f& center, float radX, float radY, float lineWidth = 1.0f);
 	void DrawEllipse(const Ellipsef& ellipse, float lineWidth = 1.0f);
+	void DrawCircle(const Point2f& center, float rad, float lineWidth = 1.f);
+	void DrawCircle(const Circlef& circle, float lineWidth = 1.f);
 	void FillEllipse(float centerX, float centerY, float radX, float radY);
 	void FillEllipse(const Ellipsef& ellipse);
 	void FillEllipse(const Point2f& center, float radX, float radY);
+	void FillCircle(const Point2f& center, float rad);
+	void FillCircle(const Circlef& circle);
 
 	// Draws an arc. The angle parameters are in radians, not in degrees.
 	void DrawArc(float centerX, float centerY, float radX, float radY, float fromAngle, float tillAngle, float lineWidth = 1.0f);
@@ -70,7 +74,20 @@ namespace utils
 #pragma endregion TextureFunctionality
 
 #pragma region CollisionFunctionality
-
+	float GetDistance(Point2f point1, Point2f point2);
+	float GetDistance(float p1x, float p1y, float p2x, float p2y);
+	bool IsPointInCircle(const Point2f& p, const Circlef& c);
+	bool IsPointInRect(const Point2f& p, const Rectf& r);
+	bool IsOverlapping(const Rectf& r1, const Rectf& r2);
+	bool IsOverLapping(const Circlef& c1, const Circlef& c2);
 #pragma endregion CollisionFunctionality
+
+#pragma region OwnFunctions
+	int GetRandInt(int min, int max);
+	float GetRandFloat(float min, float max);
+	float ConvertToRadians(float degrees);
+	float ConvertToDegrees(float radians);
+	Point2f CreateCoordinatesFromRads(float radius, float radians, const Point2f& offset);
+#pragma endregion OwnFunctions
 
 }
