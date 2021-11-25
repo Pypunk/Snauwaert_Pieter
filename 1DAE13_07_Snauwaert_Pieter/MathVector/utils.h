@@ -87,7 +87,7 @@ namespace utils
 	float GetRandFloat(float min, float max);
 	float ConvertToRadians(float degrees);
 	float ConvertToDegrees(float radians);
-	Point2f CreateCoordinatesFromRads(float radius, float radians, const Point2f& offset);
+	Point2f CreateCoordinatesFromRads(float radius, float radians, const Point2f& offset = {});
 #pragma endregion OwnFunctions
 
 #pragma region VectorMath
@@ -102,5 +102,6 @@ namespace utils
 	Vector2f Normalize(const Vector2f& v1);
 	float AngleBetween(const Vector2f& v1, const Vector2f& v2);
 	bool AreEqual(const Vector2f& v1, const Vector2f& v2);
+	Vector2f CalculateProjection(const Vector2f& v, Vector2f& v2, float angle);
 #pragma endregion VectorMath
 }

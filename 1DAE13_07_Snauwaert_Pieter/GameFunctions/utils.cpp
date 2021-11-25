@@ -577,4 +577,76 @@ namespace utils
 		return Point2f{ x, y };
 	}
 #pragma endregion OwnFunctions
+
+#pragma region VectorMath
+	void DrawVector(const Vector2f& vector, const Point2f& startPos)
+	{
+		const float lenght{ -10.f };
+		const float angle{ 30 };
+		const float atan = ConvertToRadians(90) - atan2f(vector.x, vector.y);
+		const float vectorLength{ Length(vector) };
+		const Point2f endPoint{ CreateCoordinatesFromRads(vectorLength,atan,startPos) };
+		DrawLine(startPos, endPoint);
+		Point2f triangleBottomLeft{ CreateCoordinatesFromRads(lenght, atan + ConvertToRadians(angle), endPoint) };
+		Point2f triangleBottomRight{ CreateCoordinatesFromRads(lenght, atan - ConvertToRadians(angle), endPoint) };
+		FillTriangle(endPoint, triangleBottomLeft, triangleBottomRight);
+	}
+	std::string ToString(const Vector2f& vector)
+	{
+		std::string vectorString{};
+		vectorString += "[" + std::to_string(vector.x) + ", " + std::to_string(vector.y) + "]";
+		return vectorString;
+	}
+	Vector2f Add(const Vector2f& v1, const Vector2f& v2)
+	{
+		Vector2f addition{ v1.x + v2.x,v1.y+v2.y };
+		return addition;
+	}
+	Vector2f Subtract(const Vector2f& v1, const Vector2f& v2)
+	{
+		Vector2f subtraction{ v1.x - v2.x,v1.y - v2.y };
+		return subtraction;
+	}
+	float Dot(const Vector2f& v1, const Vector2f& v2)
+	{
+		return v1.x * v2.x + v1.y * v2.y;
+	}
+	float Cross(const Vector2f& v1, const Vector2f& v2)
+	{
+		return v1.x * v2.y - v1.y * v2.x;
+	}
+	float Length(const Vector2f& vector)
+	{
+		return sqrtf(powf(vector.x, 2) + powf(vector.y, 2));
+	}
+	Vector2f Scale(const Vector2f& v1, float scalar)
+	{
+		Vector2f scaledVector{ v1.x * scalar,v1.y * scalar };
+		return scaledVector;
+	}
+	Vector2f Normalize(const Vector2f& v1)
+	{
+		Vector2f normal{ v1.x / Length(v1), v1.y / Length(v1) };
+		return normal;
+	}
+	float AngleBetween(const Vector2f& v1, const Vector2f& v2)
+	{
+		return ConvertToDegrees(atan2(Cross(v1,v2),Dot(v1,v2)));
+	}
+	bool AreEqual(const Vector2f& v1, const Vector2f& v2)
+	{
+		float Xdifference{ v2.x - v1.x };
+		float Ydifference{ v2.y - v1.y };
+		return Xdifference <= 0.001f && Ydifference <= 0.001f;
+	}
+	Vector2f CalculateProjection(const Vector2f& v, Vector2f& v2, float angle)
+	{
+		Point2f coords{ CreateCoordinatesFromRads(Length(v),ConvertToRadians(angle)) };
+		Vector2f newVector{ coords.x,coords.y };
+		v2 = newVector;
+		Vector2f normal{ Normalize(v) };
+		float dotProduct{ Dot(newVector, normal)} ;
+		return Scale(normal, dotProduct);
+	}
+#pragma endregion VectorMath
 }

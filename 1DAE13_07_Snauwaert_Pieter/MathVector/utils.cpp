@@ -581,10 +581,15 @@ namespace utils
 #pragma region VectorMath
 	void DrawVector(const Vector2f& vector, const Point2f& startPos)
 	{
+		const float lenght{ -10.f };
+		const float angle{ 30 };
 		const float atan = ConvertToRadians(90) - atan2f(vector.x, vector.y);
-		const float length{ Length(vector) };
-		const Point2f endPoint{ CreateCoordinatesFromRads(length,atan,startPos) };
+		const float vectorLength{ Length(vector) };
+		const Point2f endPoint{ CreateCoordinatesFromRads(vectorLength,atan,startPos) };
 		DrawLine(startPos, endPoint);
+		Point2f triangleBottomLeft{ CreateCoordinatesFromRads(lenght, atan + ConvertToRadians(angle), endPoint) };
+		Point2f triangleBottomRight{ CreateCoordinatesFromRads(lenght, atan - ConvertToRadians(angle), endPoint) };
+		FillTriangle(endPoint, triangleBottomLeft, triangleBottomRight);
 	}
 	std::string ToString(const Vector2f& vector)
 	{
@@ -633,6 +638,15 @@ namespace utils
 		float Xdifference{ v2.x - v1.x };
 		float Ydifference{ v2.y - v1.y };
 		return Xdifference <= 0.001f && Ydifference <= 0.001f;
+	}
+	Vector2f CalculateProjection(const Vector2f& v, Vector2f& v2, float angle)
+	{
+		Point2f coords{ CreateCoordinatesFromRads(Length(v),ConvertToRadians(angle)) };
+		Vector2f newVector{ coords.x,coords.y };
+		v2 = newVector;
+		Vector2f normal{ Normalize(v) };
+		float dotProduct{ Dot(newVector, normal)} ;
+		return Scale(normal, dotProduct);
 	}
 #pragma endregion VectorMath
 }

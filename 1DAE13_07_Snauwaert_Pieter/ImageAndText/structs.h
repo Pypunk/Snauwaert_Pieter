@@ -69,5 +69,12 @@ struct Ellipsef
 	float radiusY;
 };
 
+struct Vector2f
+{
+	Vector2f();
+	explicit Vector2f(float x, float y);
 
+	float x;
+	float y;
+};
 
