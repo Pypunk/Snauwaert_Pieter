@@ -78,6 +78,7 @@ namespace utils
 	float GetDistance(float p1x, float p1y, float p2x, float p2y);
 	Point2f GetMiddle(const Point2f& pointA, const Point2f& pointB);
 	Point2f GetMiddle(float p1x, float p1y, float p2x, float p2y);
+	Point2f GetMiddleOfRect(const Rectf& rect);
 	bool IsPointInCircle(const Point2f& p, const Circlef& c);
 	bool IsPointInRect(const Point2f& p, const Rectf& r);
 	bool IsOverlapping(const Rectf& r1, const Rectf& r2);

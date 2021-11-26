@@ -528,6 +528,10 @@ namespace utils
 	{
 		return Point2f{ (p1x + p2x) / 2, (p1y + p2y) / 2 };
 	}
+	Point2f GetMiddleOfRect(const Rectf& rect)
+	{
+		return Point2f{ rect.left + rect.width / 2,rect.bottom + rect.height / 2 };
+	}
 	bool IsPointInCircle(const Point2f& p, const Circlef& c)
 	{
 		return (p.x >= c.center.x - c.radius && p.x <= c.center.x + c.radius
