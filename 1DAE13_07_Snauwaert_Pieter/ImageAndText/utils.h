@@ -74,8 +74,10 @@ namespace utils
 #pragma endregion TextureFunctionality
 
 #pragma region CollisionFunctionality
-	float GetDistance(Point2f point1, Point2f point2);
+	float GetDistance(const Point2f& point1, const Point2f& point2);
 	float GetDistance(float p1x, float p1y, float p2x, float p2y);
+	Point2f GetMiddle(const Point2f& pointA, const Point2f& pointB);
+	Point2f GetMiddle(float p1x, float p1y, float p2x, float p2y);
 	bool IsPointInCircle(const Point2f& p, const Circlef& c);
 	bool IsPointInRect(const Point2f& p, const Rectf& r);
 	bool IsOverlapping(const Rectf& r1, const Rectf& r2);
@@ -87,7 +89,21 @@ namespace utils
 	float GetRandFloat(float min, float max);
 	float ConvertToRadians(float degrees);
 	float ConvertToDegrees(float radians);
-	Point2f CreateCoordinatesFromRads(float radius, float radians, const Point2f& offset);
+	Point2f CreateCoordinatesFromRads(float radius, float radians, const Point2f& offset = {});
 #pragma endregion OwnFunctions
 
+#pragma region VectorMath
+	void DrawVector(const Vector2f& vector, const Point2f& startPos = {});
+	std::string ToString(const Vector2f& vector);
+	Vector2f Add(const Vector2f& v1, const Vector2f& v2);
+	Vector2f Subtract(const Vector2f& v1, const Vector2f& v2);
+	float Dot(const Vector2f& v1, const Vector2f& v2);
+	float Cross(const Vector2f& v1, const Vector2f& v2);
+	float Length(const Vector2f& vector);
+	Vector2f Scale(const Vector2f& v1, float scalar);
+	Vector2f Normalize(const Vector2f& v1);
+	float AngleBetween(const Vector2f& v1, const Vector2f& v2);
+	bool AreEqual(const Vector2f& v1, const Vector2f& v2);
+	Vector2f CalculateProjection(const Vector2f& v, Vector2f& v2, float angle);
+#pragma endregion VectorMath
 }

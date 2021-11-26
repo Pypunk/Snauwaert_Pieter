@@ -12,8 +12,11 @@ void Draw()
 {
 	ClearBackground();
 	// Put your own draw statements here
-	Point2f origin{ 0,0 };
-	DrawSierpinskiTriangle(origin, g_WindowWidth);
+	const float size{g_WindowWidth};
+	Point2f left{};
+	Point2f top{ size / 2,size };
+	Point2f right{ size,0 };
+	DrawSierpinskiTriangle(left, top, right);
 }
 
 void Update(float elapsedSec)
@@ -96,29 +99,17 @@ void OnMouseUpEvent(const SDL_MouseButtonEvent& e)
 
 #pragma region ownDefinitions
 // Define your own functions here
-void DrawEquilateralTriangle(Point2f& position, float size, bool isFilled)
+void DrawSierpinskiTriangle(const Point2f& left, const Point2f& top, const Point2f& right)
 {
-	Point2f position2{ CreateCoordinatesFromRads(size, ConvertToRadians(60.0f), position) };
-	Point2f position3{ Point2f{ position.x + size, position.y } };
-	if (isFilled)
-		FillTriangle(position, position2, position3);
-	else
-		DrawTriangle(position, position2, position3);
-}
-
-void DrawSierpinskiTriangle(Point2f& position, float size)
-{
-	if (size >= 10.0f) 
+	utils::DrawTriangle(left, top, right);
+	if (GetDistance(left, right) > 20.0f)
 	{
-		DrawEquilateralTriangle(position, size, false);
-		SetColor(1, 0, 0, 1);
-		DrawSierpinskiTriangle(position, size / 2);
-		Point2f position2{ CreateCoordinatesFromRads(size / 2, ConvertToRadians(60.0f), position) };
-		SetColor(0, 1, 0, 1);
-		DrawSierpinskiTriangle(position2, size / 2);
-		Point2f position3{ position.x + size / 2, position.y };
-		SetColor(0, 0, 1, 1);
-		DrawSierpinskiTriangle(position3, size / 2);
+		SetColor(1.0f, 0.0f, 0.0f);
+		DrawSierpinskiTriangle(left, GetMiddle(left, top), GetMiddle(left, right));
+		SetColor(0.0f, 1.0f, 0.0f);
+		DrawSierpinskiTriangle(GetMiddle(left, right), GetMiddle(right, top), right);
+		SetColor(0.0f, 0.0f, 1.0f);
+		DrawSierpinskiTriangle(GetMiddle(left, top), top, GetMiddle(top, right));
 	}
 }
 #pragma endregion ownDefinitions

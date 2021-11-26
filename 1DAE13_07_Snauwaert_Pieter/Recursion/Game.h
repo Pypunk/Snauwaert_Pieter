@@ -5,18 +5,16 @@ using namespace utils;
 std::string g_WindowTitle{ "Recursion - Snauwaert, Pieter - 1DAE13" };
 
 // Change the window dimensions here
-float g_WindowWidth{ 600 };
-float g_WindowHeight{ 550 };
+float g_WindowWidth{ 400 };
+float g_WindowHeight{ 400 };
 #pragma endregion gameInformation
 
 
 
 #pragma region ownDeclarations
 // Declare your own global variables here
-
 // Declare your own functions here
-void DrawEquilateralTriangle(const Point2f& position, float size, bool isFilled);
-void DrawSierpinskiTriangle(Point2f& position, float size);
+void DrawSierpinskiTriangle(const Point2f& left, const Point2f& top, const Point2f& right);
 #pragma endregion ownDeclarations
 
 #pragma region gameFunctions											

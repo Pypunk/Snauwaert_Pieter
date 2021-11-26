@@ -512,13 +512,21 @@ namespace utils
 
 
 #pragma region CollisionFunctionality
-	float GetDistance(Point2f point1, Point2f point2)
+	float GetDistance(const Point2f& point1, const Point2f& point2) 
 	{
 		return sqrtf(powf(point2.x - point1.x, 2) + powf(point2.y - point1.y, 2));
 	}
 	float GetDistance(float p1x, float p1y, float p2x, float p2y)
 	{
 		return sqrtf(powf(p2x - p1x, 2) + powf(p2y - p1y, 2));
+	}
+	Point2f GetMiddle(const Point2f& pointA, const Point2f& pointB)
+	{
+		return Point2f{ (pointA.x + pointB.x) / 2, (pointA.y + pointB.y) / 2 };
+	}
+	Point2f GetMiddle(float p1x, float p1y, float p2x, float p2y)
+	{
+		return Point2f{ (p1x + p2x) / 2, (p1y + p2y) / 2 };
 	}
 	bool IsPointInCircle(const Point2f& p, const Circlef& c)
 	{
