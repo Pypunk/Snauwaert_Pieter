@@ -35,22 +35,31 @@ void Draw()
 	destinationRect.width = g_DAELogo.width/2;
 	destinationRect.height = g_DAELogo.height/2;
 	DrawTexture(g_DAELogo, destinationRect);
+
+	Rectf sourceRectangle{};
+	sourceRectangle.left = 55;
+	sourceRectangle.bottom = 50;
+	sourceRectangle.width = 30;
+	sourceRectangle.height = 10;
+	DrawTexture(g_DAELogo, g_FramePos, sourceRectangle);
 }
 
 void Update(float elapsedSec)
 {
-	// process input, do physics 
-
-	// e.g. Check keyboard state
-	//const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
-	//if ( pStates[SDL_SCANCODE_RIGHT] )
-	//{
-	//	std::cout << "Right arrow key is down\n";
-	//}
-	//if ( pStates[SDL_SCANCODE_LEFT] && pStates[SDL_SCANCODE_UP])
-	//{
-	//	std::cout << "Left and up arrow keys are down\n";
-	//}
+	 //process input, do physics 
+	const float speed{ 50 };
+	 //e.g. Check keyboard state
+	const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
+	if ( pStates[SDL_SCANCODE_RIGHT] )
+	{
+		//std::cout << "Right arrow key is down\n";
+		g_FramePos.x += speed * elapsedSec;
+	}
+	if ( pStates[SDL_SCANCODE_LEFT] /*&& pStates[SDL_SCANCODE_UP]*/)
+	{
+		//std::cout << "Left and up arrow keys are down\n";
+		g_FramePos.x -= speed * elapsedSec;
+	}
 }
 
 void End()
