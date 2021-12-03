@@ -588,6 +588,24 @@ namespace utils
 		const float y = offset.y + (radius * sinf(radians));
 		return Point2f{ x, y };
 	}
+	int GetIndex(int rowIdx, int colIdx, int nrCols)
+	{
+		return rowIdx * nrCols + colIdx;
+	}
+	void CreateGrid(Rectf* pgrid, int cols, int rows, float cellSize)
+	{
+		Point2f position{ 10,10 };
+		for (int i{}; i < rows; ++i)
+		{
+			for (int j{}; j < cols; ++j)
+			{
+				pgrid[GetIndex(i, j, cols)] = Rectf{ position.x,position.y,cellSize,cellSize };
+				position.x += cellSize;
+			}
+			position.x = 10;
+			position.y += cellSize;
+		}
+	}
 #pragma endregion OwnFunctions
 
 #pragma region drawFunctions
@@ -644,13 +662,35 @@ namespace utils
 				break;
 			}
 		}
-		//std::vector<Point2f> pentaPoints{};
-		//pentaPoints.push_back(Point2f{ cosf(2 * angle) * radius + center.x,sinf(2 * angle) * radius + center.y });
-		//pentaPoints.push_back(Point2f{ cosf(2 * angle * 3) * radius + center.x,sinf(2 * angle * 3) * radius + center.y });
-		//pentaPoints.push_back(Point2f{ cosf(2 * angle * 5) * radius + center.x,sinf(2 * angle * 5) * radius + center.y });
-		//pentaPoints.push_back(Point2f{ cosf(2 * angle * 2) * radius + center.x,sinf(2 * angle * 2) * radius + center.y });
-		//pentaPoints.push_back(Point2f{ cosf(2 * angle * 4) * radius + center.x,sinf(2 * angle * 4) * radius + center.y });
 		DrawPolygon(pentaPoints,pentaPointsAmount);
+	}
+	void DrawRotatingPentagram(const Point2f& center, float radius, AngleSpeed pAngleSpeed)
+	{
+		const int pentaPointsAmount{ 5 };
+		const float angle{ g_Pi/pentaPointsAmount + ConvertToRadians(pAngleSpeed.angle) };
+		Point2f pentaPoints[pentaPointsAmount]{};
+		for (int i{ 0 }; i < 5; ++i)
+		{
+			switch (i)
+			{
+			case 0:
+				pentaPoints[i] = Point2f{ cosf(2 * angle) * radius + center.x,sinf(2 * angle) * radius + center.y };
+				break;
+			case 1:
+				pentaPoints[i] = Point2f{ cosf(2 * angle * 3) * radius + center.x,sinf(2 * angle * 3) * radius + center.y };
+				break;
+			case 2:
+				pentaPoints[i] = Point2f{ cosf(2 * angle * 5) * radius + center.x,sinf(2 * angle * 5) * radius + center.y };
+				break;
+			case 3:
+				pentaPoints[i] = Point2f{ cosf(2 * angle * 2) * radius + center.x,sinf(2 * angle * 2) * radius + center.y };
+				break;
+			case 4:
+				pentaPoints[i] = Point2f{ cosf(2 * angle * 4) * radius + center.x,sinf(2 * angle * 4) * radius + center.y };
+				break;
+			}
+		}
+		DrawPolygon(pentaPoints, 5);
 	}
 	void DrawRadiantRect(Point2f& position, float width, float height, Color4f& startColor, const Color4f& endColor)
 	{

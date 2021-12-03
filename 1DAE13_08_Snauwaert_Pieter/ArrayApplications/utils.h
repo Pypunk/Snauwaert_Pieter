@@ -91,12 +91,15 @@ namespace utils
 	float ConvertToRadians(float degrees);
 	float ConvertToDegrees(float radians);
 	Point2f CreateCoordinatesFromRads(float radius, float radians, const Point2f& offset = {});
+	int GetIndex(int rowIdx, int colIdx, int nrCols);
+	void CreateGrid(Rectf* pgrid, int cols, int rows, float cellSize);
 #pragma endregion OwnFunctions
 
 #pragma region drawFunctions
 	void DrawSquares(Point2f& position, float squareSize, float amount);
 	void DrawEguilateralTriangle(const Point2f& position, float size, bool isFilled = true);
 	void DrawPentagram(const Point2f& center, float radius);
+	void DrawRotatingPentagram(const Point2f& center, float radius, AngleSpeed pAngleSpeed);
 	void DrawRadiantRect(Point2f& position, float width, float height, Color4f& startColor, const Color4f& endColor);
 	void DrawDotGrid(Point2f& position, float radius, float offSet, float cols, float rows);
 #pragma endregion drawFunctions
