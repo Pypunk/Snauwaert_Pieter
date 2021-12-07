@@ -69,26 +69,26 @@ void OnKeyDownEvent(SDL_Keycode key)
 	case SDLK_LEFT:
 		isValidPos = CheckCellPositionX(g_SelectedIndex, g_SelectedIndex - 1);
 		if (!isValidPos) break;
-		g_SelectedCell.direction = utils::Direction::left;
+		g_SelectedCell.direction = Direction::left;
 		CheckAndMoveCell(g_SelectedIndex, g_SelectedIndex - 1);
 		break;
 	case SDLK_RIGHT:
 		isValidPos = CheckCellPositionX(g_SelectedIndex, g_SelectedIndex + 1);
 		if (!isValidPos) break;
-		g_SelectedCell.direction = utils::Direction::right;
+		g_SelectedCell.direction = Direction::right;
 		CheckAndMoveCell(g_SelectedIndex, g_SelectedIndex + 1);
 		break;
 	case SDLK_DOWN:
 		isValidPos = CheckCellPositionY(g_SelectedIndex, g_SelectedIndex - 5);
 		if (!isValidPos) break;
-		g_SelectedCell.direction = utils::Direction::down;
+		g_SelectedCell.direction = Direction::down;
 		CheckAndMoveCell(g_SelectedIndex, g_SelectedIndex - 5);
 		break;
 	case SDLK_UP:
 		isValidPos = CheckCellPositionY(g_SelectedIndex, g_SelectedIndex + 5);
 		if (!isValidPos) break;
 		CheckCellPositionY(g_SelectedIndex, g_SelectedIndex + 5);
-		g_SelectedCell.direction = utils::Direction::up;
+		g_SelectedCell.direction = Direction::up;
 		CheckAndMoveCell(g_SelectedIndex, g_SelectedIndex + 5);
 		break;
 	}
@@ -132,7 +132,7 @@ void OnMouseUpEvent(const SDL_MouseButtonEvent& e)
 		for (int i{}; i < g_AmountOfCells; ++i)
 		{
 			const bool pointInRect{ IsPointInRect(g_MousePos, g_Cells[i].rect) };
-			if (pointInRect && g_Cells[i].state != utils::RectState::empty) {
+			if (pointInRect && g_Cells[i].state != RectState::empty) {
 				g_SelectedCell = g_Cells[i];
 				g_SelectedIndex = i;
 			}
@@ -149,18 +149,18 @@ void SetCurrentStates(Cell* pCells, const int size)
 {
 	for (int i{}; i < size; ++i)
 	{
-		pCells[i].state = utils::RectState::noCog;
+		pCells[i].state = RectState::noCog;
 	}
-	pCells[GetRandInt(0, size - 1)].state = utils::RectState::empty;
+	pCells[GetRandInt(0, size - 1)].state = RectState::empty;
 
 	for (int i{}; i < g_AmountOfCogs; ++i)
 	{
 		int rndInt{ GetRandInt(0, size - 1) };
-		while (g_Cells[rndInt].state == utils::RectState::empty ||
-			g_Cells[rndInt].state == utils::RectState::cog) {
+		while (g_Cells[rndInt].state == RectState::empty ||
+			g_Cells[rndInt].state == RectState::cog) {
 			rndInt = GetRandInt(0, size - 1);
 		}
-		pCells[rndInt].state = utils::RectState::cog;
+		pCells[rndInt].state = RectState::cog;
 	}
 }
 void DrawCell(Cell pCell)
@@ -206,7 +206,7 @@ void CheckAndMoveCell(int currentIndex, int secondIndex) {
 	const Cell cell1{ g_Cells[currentIndex] };
 	const Cell cell2{ g_Cells[secondIndex] };
 
-	if (cell2.state != utils::RectState::empty)
+	if (cell2.state != RectState::empty)
 	{
 		return;
 	}
@@ -222,12 +222,13 @@ void CheckStates()
 		for (int j{}; j < g_Cols; ++j)
 		{
 			int index{ GetIndex(i,j,g_Cols) };
-			bool result{ CheckNextCellX(index, index - 1, index) };
+			bool resultX{ CheckNextCellX(index, index - 1) };
+			bool resultY{ CheckNextCellY(index,index - 5) };
 		}
 	}
 }
 
-bool CheckNextCellX(int index, int previousIndex, int& changableIndex)
+bool CheckNextCellX(int index, int previousIndex)
 {
 	bool isValidPos{ CheckCellPositionX(index,previousIndex) };
 	if (!isValidPos)
@@ -239,7 +240,21 @@ bool CheckNextCellX(int index, int previousIndex, int& changableIndex)
 	const Cell cell2{ g_Cells[previousIndex] };
 	if (cell1.state == cell2.state && cell1.state == RectState::cog)
 	{
-		changableIndex = previousIndex;
+		return true;
+	}
+	return false;
+}
+bool CheckNextCellY(int index, int previousIndex)
+{
+	bool isValidPos{ CheckCellPositionY(index,previousIndex) };
+	if (!isValidPos)
+	{
+		return false;
+}
+	const Cell cell1{ g_Cells[index] };
+	const Cell cell2{ g_Cells[previousIndex] };
+	if (cell1.state == cell2.state && cell1.state == RectState::cog)
+	{
 		return true;
 	}
 	return false;

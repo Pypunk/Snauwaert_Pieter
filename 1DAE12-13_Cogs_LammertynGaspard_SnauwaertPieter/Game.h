@@ -30,7 +30,8 @@ void DrawCell(Cell pCell);
 bool CheckCellPositionX(int currentIndex, int secondIndex);
 bool CheckCellPositionY(int currentIndex, int secondIndex);
 void CheckAndMoveCell(int currentIndex, int secondIndex);
-bool CheckNextCellX(int index, int previousIndex, int& changableInt);
+bool CheckNextCellX(int index, int previousIndex);
+bool CheckNextCellY(int index, int previousIndex);
 void CheckStates();
 #pragma endregion ownDeclarations
 
