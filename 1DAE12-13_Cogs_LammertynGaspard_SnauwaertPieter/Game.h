@@ -16,7 +16,7 @@ float g_WindowHeight{ 300 };
 const int g_AmountOfCells{25};
 const int g_Rows{ 5 };
 const int g_Cols{ 5 };
-const int g_AmountOfCogs{ g_Rows + g_Cols };
+const int g_AmountOfCogs{ 10 };
 const float g_CellSize{ 50 };
 int g_SelectedIndex{};
 Point2f g_MousePos{};
