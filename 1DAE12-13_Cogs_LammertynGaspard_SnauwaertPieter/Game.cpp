@@ -217,15 +217,70 @@ void CheckAndMoveCell(int currentIndex, int secondIndex) {
 }
 void CheckStates()
 {
-	for (int i{}; i < g_Rows; ++i)
+	int cogsIndexes[g_AmountOfCogs]{};
+	int currentIndex{};
+	for (int i{}; i < g_AmountOfCells; ++i)
 	{
-		for (int j{}; j < g_Cols; ++j)
+		const Cell currentCell{ g_Cells[i] };
+		if (currentCell.state == utils::RectState::cog)
 		{
-			int index{ GetIndex(i,j,g_Cols) };
-			bool resultX{ CheckNextCellX(index, index - 1) };
-			bool resultY{ CheckNextCellY(index,index - 5) };
+			cogsIndexes[currentIndex] = i;
+			++currentIndex;
 		}
 	}
+
+	int connectedCogsIndexes[g_AmountOfCogs]{};
+	int currentValidCogs{};
+	for (int i{}; i < g_AmountOfCogs; ++i) {
+		bool isNotValid{ IsNotConnected(cogsIndexes[i]) };
+		if (!isNotValid) {
+			connectedCogsIndexes[i] = cogsIndexes[i];
+			++currentValidCogs;
+		}
+	}
+
+	UnCheckAllCells();
+
+	bool isOneCellNotConnected{ false };
+
+	for (int i{}; i < currentValidCogs; ++i) {
+		bool isNotValid{ IsNotConnected(connectedCogsIndexes[i]) };
+		if (isNotValid) {
+			isOneCellNotConnected = true;
+		}
+	}
+
+	UnCheckAllCells();
+
+
+	if (currentValidCogs >= 9 && !isOneCellNotConnected) {
+		if (g_Cells[0].state == utils::RectState::cog && g_Cells[g_AmountOfCells - 1].state == utils::RectState::cog)
+		{
+			std::cout << "Yes, we did it!!";
+		}
+	}
+}
+
+void UnCheckAllCells()
+{
+	for (int i{}; i < g_AmountOfCells; ++i) {
+		if (g_Cells[i].checked) {
+			g_Cells[i].checked = false;
+		}
+	}
+}
+
+bool IsNotConnected(int index) {
+
+
+	bool resultXLeft{ CheckNextCellX(index, index - 1) };
+	bool resultXRight{ CheckNextCellX(index, index + 1) };
+	bool resultYUp{ CheckNextCellY(index,index + 5) };
+	bool resultYDown{ CheckNextCellY(index,index - 5) };
+
+
+	bool result{ !resultXLeft && !resultXRight && !resultYUp && !resultYDown };
+	return result;
 }
 
 bool CheckNextCellX(int index, int previousIndex)
@@ -238,8 +293,15 @@ bool CheckNextCellX(int index, int previousIndex)
 
 	const Cell cell1{ g_Cells[index] };
 	const Cell cell2{ g_Cells[previousIndex] };
+
+	if (cell1.checked)
+	{
+		return false;
+	}
+
 	if (cell1.state == cell2.state && cell1.state == RectState::cog)
 	{
+		g_Cells[index].checked = true;
 		return true;
 	}
 	return false;
@@ -253,8 +315,15 @@ bool CheckNextCellY(int index, int previousIndex)
 }
 	const Cell cell1{ g_Cells[index] };
 	const Cell cell2{ g_Cells[previousIndex] };
+
+	if (cell1.checked)
+	{
+		return false;
+	}
+
 	if (cell1.state == cell2.state && cell1.state == RectState::cog)
 	{
+		g_Cells[index].checked = true;
 		return true;
 	}
 	return false;

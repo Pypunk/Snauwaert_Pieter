@@ -29,10 +29,13 @@ void SetCurrentStates(Cell* pCells, const int size);
 void DrawCell(Cell pCell);
 bool CheckCellPositionX(int currentIndex, int secondIndex);
 bool CheckCellPositionY(int currentIndex, int secondIndex);
+bool IsNotConnected(int index);
 void CheckAndMoveCell(int currentIndex, int secondIndex);
 bool CheckNextCellX(int index, int previousIndex);
 bool CheckNextCellY(int index, int previousIndex);
 void CheckStates();
+void UnCheckAllCells();
+
 #pragma endregion ownDeclarations
 
 #pragma region gameFunctions											

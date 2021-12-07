@@ -104,6 +104,7 @@ namespace utils
 		Rectf rect;
 		RectState state{RectState::empty};
 		Direction direction{Direction()};
+		bool checked{ false };
 	};
 
 #pragma region OwnFunctions
