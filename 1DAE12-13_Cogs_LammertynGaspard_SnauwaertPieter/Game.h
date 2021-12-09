@@ -5,8 +5,8 @@ using namespace utils;
 std::string g_WindowTitle{ "Project name - Name, firstname - 1DAExx" };
 
 // Change the window dimensions here
-float g_WindowWidth{ 500 };
-float g_WindowHeight{ 300 };
+float g_WindowWidth{ 1280 };
+float g_WindowHeight{ 720 };
 #pragma endregion gameInformation
 
 
@@ -17,11 +17,12 @@ const int g_AmountOfCells{25};
 const int g_Rows{ 5 };
 const int g_Cols{ 5 };
 const int g_AmountOfCogs{ 10 };
-const float g_CellSize{ 50 };
+const float g_CellSize{ 100 };
 int g_SelectedIndex{};
 Point2f g_MousePos{};
 Cell g_Cells[g_AmountOfCells];
 Texture g_Cog{};
+Texture g_StartAndEndTexture{};
 Cell g_SelectedCell{};
 
 // Declare your own functions here
@@ -38,6 +39,7 @@ void UnCheckAllCells();
 void FilterOutCogs(int* cogsIndexes, int* connectedCogsIndexes, int& currentValidCogs);
 int ReturnCurrentCogsAmount();
 void PrintInformation();
+void TurnCogs();
 #pragma endregion ownDeclarations
 
 #pragma region gameFunctions											

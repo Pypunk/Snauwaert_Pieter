@@ -85,7 +85,11 @@ namespace utils
 	bool IsOverLapping(const Circlef& c1, const Circlef& c2);
 #pragma endregion CollisionFunctionality
 
-
+	enum class MovingState
+	{
+		forwards,
+		backwards
+	};
 	enum class RectState
 	{
 		empty,
@@ -104,6 +108,7 @@ namespace utils
 		Rectf rect;
 		RectState state{RectState::empty};
 		Direction direction{Direction()};
+		MovingState movingState{ MovingState() };
 		bool checked{ false };
 	};
 

@@ -7,16 +7,28 @@
 void Start()
 {
 	// initialize game resources here
-	const float offset{ 125 };
+	const float offset{ 250 };
 	Point2f Position{ g_WindowWidth / 2 - offset,g_WindowHeight / 2 - offset };
 	CreateGrid(Position, g_Cells, g_Cols, g_Rows, g_CellSize);
 	SetCurrentStates(g_Cells, g_AmountOfCells);
-	TextureFromFile("Resources/Cog.png", g_Cog);
+	bool isCogCreated{ TextureFromFile("Resources/Cog.png", g_Cog) };
+	bool isStartAndEndCreated{ TextureFromFile("Resources/SilverCog.png", g_StartAndEndTexture) };
+
+	if (!isCogCreated)
+	{
+		std::cout << "Texture Cog.png could not be loaded\n";
+	}
+
+	if (!isStartAndEndCreated)
+	{
+		std::cout << "Texture SilverCog.png could not be loaded\n";
+	}
 }
 
 void Draw()
 {
-	ClearBackground();
+	//Color brown
+	ClearBackground(70 / 255.f, 47 / 255.f, 34 / 255.f);
 
 	// Put your own draw statements here
 	for (int i{}; i < g_AmountOfCells; ++i)
@@ -34,6 +46,13 @@ void Draw()
 			break;
 		}
 	}
+	Rectf destRect{};
+	destRect = g_Cells[0].rect;
+	destRect.left -= g_Cells[0].rect.width;
+	DrawTexture(g_StartAndEndTexture, destRect);
+	destRect = g_Cells[g_AmountOfCells - 1].rect;
+	destRect.left += g_Cells[g_AmountOfCells - 1].rect.width;
+	DrawTexture(g_StartAndEndTexture, destRect);
 }
 
 void Update(float elapsedSec)
@@ -56,6 +75,7 @@ void End()
 {
 	// free game resources here
 	DeleteTexture(g_Cog);
+	DeleteTexture(g_StartAndEndTexture);
 }
 #pragma endregion gameFunctions
 
@@ -304,6 +324,11 @@ void PrintInformation()
 	std::cout << "Click on a cell to select it.\n";
 	std::cout << "Arrow keys to move selected cell.\n\n";
 	std::cout << "Made by Gaspard Lammertyn and Pieter Snauwaert\n";
+}
+
+void TurnCogs()
+{
+
 }
 
 bool IsNotConnected(int index) {
