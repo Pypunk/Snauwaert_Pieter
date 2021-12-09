@@ -91,6 +91,9 @@ void OnKeyDownEvent(SDL_Keycode key)
 		g_SelectedCell.direction = Direction::up;
 		CheckAndMoveCell(g_SelectedIndex, g_SelectedIndex + 5);
 		break;
+	case SDLK_i:
+		PrintInformation();
+		break;
 	}
 }
 
@@ -218,42 +221,18 @@ void CheckAndMoveCell(int currentIndex, int secondIndex) {
 void CheckStates()
 {
 	int cogsIndexes[g_AmountOfCogs]{};
-	int currentIndex{};
-	for (int i{}; i < g_AmountOfCells; ++i)
-	{
-		const Cell currentCell{ g_Cells[i] };
-		if (currentCell.state == utils::RectState::cog)
-		{
-			cogsIndexes[currentIndex] = i;
-			++currentIndex;
-		}
-	}
-
 	int connectedCogsIndexes[g_AmountOfCogs]{};
 	int currentValidCogs{};
-	for (int i{}; i < g_AmountOfCogs; ++i) {
-		bool isNotValid{ IsNotConnected(cogsIndexes[i]) };
-		if (!isNotValid) {
-			connectedCogsIndexes[i] = cogsIndexes[i];
-			++currentValidCogs;
-		}
-	}
+	FilterOutCogs(cogsIndexes, connectedCogsIndexes, currentValidCogs);
 
 	UnCheckAllCells();
 
-	bool isOneCellNotConnected{ false };
-
-	for (int i{}; i < currentValidCogs; ++i) {
-		bool isNotValid{ IsNotConnected(connectedCogsIndexes[i]) };
-		if (isNotValid) {
-			isOneCellNotConnected = true;
-		}
-	}
+	int currentConnectedCogs{ ReturnCurrentCogsAmount() };
 
 	UnCheckAllCells();
 
 
-	if (currentValidCogs >= 9 && !isOneCellNotConnected) {
+	if (currentConnectedCogs >= g_AmountOfCells-1) {
 		if (g_Cells[0].state == utils::RectState::cog && g_Cells[g_AmountOfCells - 1].state == utils::RectState::cog)
 		{
 			std::cout << "Yes, we did it!!";
@@ -268,6 +247,63 @@ void UnCheckAllCells()
 			g_Cells[i].checked = false;
 		}
 	}
+}
+
+void FilterOutCogs(int* cogsIndexes, int* connectedCogsIndexes, int& currentValidCogs)
+{
+	int currentIndex{};
+	for (int i{}; i < g_AmountOfCells; ++i)
+	{
+		const Cell currentCell{ g_Cells[i] };
+		if (currentCell.state == utils::RectState::cog)
+		{
+			cogsIndexes[currentIndex] = i;
+			++currentIndex;
+		}
+	}
+	for (int i{}; i < g_AmountOfCogs; ++i) {
+		bool isNotValid{ IsNotConnected(cogsIndexes[i]) };
+		if (!isNotValid) {
+			connectedCogsIndexes[i] = cogsIndexes[i];
+			++currentValidCogs;
+		}
+	}
+}
+
+int ReturnCurrentCogsAmount()
+{
+	int currentCheckIndex{ 0 };
+	Cell cellToCheck{ g_Cells[0] };
+	for (int i{}; i < g_AmountOfCogs; ++i)
+	{
+		bool resultXRight{ CheckNextCellX(currentCheckIndex, currentCheckIndex + 1) };
+		bool resultYUp{ CheckNextCellY(currentCheckIndex,currentCheckIndex + 5) };
+		if (resultXRight)
+		{
+			currentCheckIndex++;
+			cellToCheck = g_Cells[currentCheckIndex];
+		}
+		if (resultYUp)
+		{
+			currentCheckIndex += 5;
+			cellToCheck = g_Cells[currentCheckIndex];
+		}
+	}
+	std::cout << currentCheckIndex << std::endl;
+	return currentCheckIndex;
+}
+
+void PrintInformation()
+{
+	std::cout << "--- Cogs ---\n\n";
+	std::cout << "In the middle of the screen you have grid. It's randomly filled with cogs.\n";
+	std::cout << "The goal is to connect cogs from one point to another.\n";
+	std::cout << "Connect the cogs from the bottom left to the top right corner.\n";
+	std::cout << "You can do this by moving cells to the only empty spot.\n\n";
+	std::cout << "--- Controls ---\n\n";
+	std::cout << "Click on a cell to select it.\n";
+	std::cout << "Arrow keys to move selected cell.\n\n";
+	std::cout << "Made by Gaspard Lammertyn and Pieter Snauwaert\n";
 }
 
 bool IsNotConnected(int index) {

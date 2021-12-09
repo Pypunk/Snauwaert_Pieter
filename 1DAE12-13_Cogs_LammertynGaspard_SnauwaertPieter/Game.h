@@ -35,7 +35,9 @@ bool CheckNextCellX(int index, int previousIndex);
 bool CheckNextCellY(int index, int previousIndex);
 void CheckStates();
 void UnCheckAllCells();
-
+void FilterOutCogs(int* cogsIndexes, int* connectedCogsIndexes, int& currentValidCogs);
+int ReturnCurrentCogsAmount();
+void PrintInformation();
 #pragma endregion ownDeclarations
 
 #pragma region gameFunctions											
