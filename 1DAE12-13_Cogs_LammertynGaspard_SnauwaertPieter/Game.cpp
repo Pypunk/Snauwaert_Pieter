@@ -12,6 +12,7 @@ void Start()
 	CreateGrid(Position, g_Cells, g_Cols, g_Rows, g_CellSize);
 	SetCurrentStates(g_Cells, g_AmountOfCells);
 	InitStartAndEndSprite();
+	InitWinText();
 }
 
 void Draw()
@@ -20,32 +21,11 @@ void Draw()
 	ClearBackground(70 / 255.f, 47 / 255.f, 34 / 255.f);
 
 	// Put your own draw statements here
-	for (int i{}; i < g_AmountOfCells; ++i)
-	{
-		switch (g_Cells[i].state)
-		{
-		case RectState::empty:
-			break;
-		case RectState::noCog:
-			DrawCell(g_Cells[i]);
-			break;
-		case RectState::cog:
-			DrawCell(g_Cells[i]);
-			if (g_IsFinished) {
-				DrawInnerCogSprite(g_Cells[i]);
-			}
-			else
-			{
-				DrawTexture(g_Cog, g_Cells[i].rect);
-			}
+	DrawCells();
 
-			break;
-		}
-	}
-
-	//SetInnerCogsMovement();
 	if (g_IsFinished) {
 		DrawOuterCogsSprites();
+		DrawWinText();
 	}
 	else
 	{
@@ -70,6 +50,7 @@ void End()
 	DeleteTexture(g_Cog);
 	DeleteTexture(g_StartEndCogSprite.texture);
 	DeleteTexture(g_InnerCogSprite.texture);
+	DeleteTexture(g_WinText);
 }
 #pragma endregion gameFunctions
 
@@ -254,7 +235,6 @@ void CheckStates()
 
 	UnCheckAllCells();
 
-
 	if (currentConnectedCogs >= g_AmountOfCells - 1) {
 		if (g_Cells[0].state == utils::RectState::cog && g_Cells[g_AmountOfCells - 1].state == utils::RectState::cog)
 		{
@@ -287,6 +267,7 @@ void FilterOutCogs(int* cogsIndexes, int* connectedCogsIndexes, int& currentVali
 			++currentIndex;
 		}
 	}
+
 	for (int i{}; i < g_AmountOfCogs; ++i) {
 		bool isNotValid{ IsNotConnected(cogsIndexes[i]) };
 		if (!isNotValid) {
@@ -330,11 +311,6 @@ void PrintInformation()
 	std::cout << "Click on a cell to select it.\n";
 	std::cout << "Arrow keys to move selected cell.\n\n";
 	std::cout << "Made by Gaspard Lammertyn and Pieter Snauwaert\n";
-}
-
-void TurnCogs()
-{
-
 }
 
 bool IsNotConnected(int index) {
@@ -403,35 +379,15 @@ void InitStartAndEndSprite()
 	bool isStartAndEndSpriteCreated{ TextureFromFile("Resources/CogAnimSilver.png", g_StartEndCogSprite.texture) };
 	bool isInnerCogSpriteCreated{ TextureFromFile("Resources/CogAnim.png", g_InnerCogSprite.texture) };
 
-	if (!isCogCreated)
-	{
-		std::cout << "Texture Cog.png could not be loaded\n";
-	}
+	if (!isCogCreated) std::cout << "Texture Cog.png could not be loaded\n";
 
-	if (!isStartAndEndCreated)
-	{
-		std::cout << "Texture SilverCog.png could not be loaded\n";
-	}
+	if (!isStartAndEndCreated) std::cout << "Texture SilverCog.png could not be loaded\n";
 
-	if (!isStartAndEndSpriteCreated)
-	{
-		std::cout << "Texture CogAnimSilver.png could not be loaded\n";
-	}
+	if (!isStartAndEndSpriteCreated) std::cout << "Texture CogAnimSilver.png could not be loaded\n";
 
-	if (!isInnerCogSpriteCreated)
-	{
-		std::cout << "Texture CogAnim.png could not be loaded\n";
-	}
+	if (!isInnerCogSpriteCreated) std::cout << "Texture CogAnim.png could not be loaded\n";
 
-	g_StartEndCogSprite.frames = 16;
-	g_StartEndCogSprite.currentFrame = 0;
-	g_StartEndCogSprite.cols = 8;
-	g_StartEndCogSprite.frameTime = 1 / 7.f;
-
-	g_InnerCogSprite.frames = 16;
-	g_InnerCogSprite.currentFrame = 0;
-	g_InnerCogSprite.cols = 8;
-	g_InnerCogSprite.frameTime = 1 / 7.f;
+	SetSpriteProperties();
 }
 
 void UpdateStartAndEndSprite(float elapsedSec) {
@@ -632,5 +588,58 @@ void DrawInnerCogSprites()
 			DrawInnerCogSpriteReverse(cell);
 		}
 	}
+}
+
+void DrawWinText()
+{
+	Rectf destRect{};
+	destRect.height = g_WinText.height;
+	destRect.width = g_WinText.width;
+	destRect.left = (g_WindowWidth / 2) - (destRect.width / 2);
+	destRect.bottom = g_WindowHeight - (g_WinText.height) - (g_WinText.height / 2);
+
+	DrawTexture(g_WinText, destRect);
+}
+
+void InitWinText()
+{
+	const Color4f white{ 1,1,1,1 };
+	bool isSuccessfull{ TextureFromString("YOU WIN!! GG!!","Resources/RobotoSlab-ExtraBold.ttf", 50, white,g_WinText)};
+	if (!isSuccessfull) {
+		std::cout << "Can not load RobotoSlab-ExtraBold.ttf as font\n";
+	}
+}
+
+void DrawCells()
+{
+	for (int i{}; i < g_AmountOfCells; ++i)
+	{
+		switch (g_Cells[i].state)
+		{
+		case RectState::empty:
+			break;
+		case RectState::noCog:
+			DrawCell(g_Cells[i]);
+			break;
+		case RectState::cog:
+			DrawCell(g_Cells[i]);
+			if (g_IsFinished) DrawInnerCogSprite(g_Cells[i]);
+			else DrawTexture(g_Cog, g_Cells[i].rect);
+			break;
+		}
+	}
+}
+
+void SetSpriteProperties()
+{
+	g_StartEndCogSprite.frames = 16;
+	g_StartEndCogSprite.currentFrame = 0;
+	g_StartEndCogSprite.cols = 8;
+	g_StartEndCogSprite.frameTime = 1 / 7.f;
+
+	g_InnerCogSprite.frames = 16;
+	g_InnerCogSprite.currentFrame = 0;
+	g_InnerCogSprite.cols = 8;
+	g_InnerCogSprite.frameTime = 1 / 7.f;
 }
 #pragma endregion ownDefinitions

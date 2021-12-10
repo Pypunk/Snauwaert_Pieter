@@ -35,6 +35,7 @@ Point2f g_MousePos{};
 Cell g_Cells[g_AmountOfCells];
 Texture g_Cog{};
 Texture g_StartTexture{};
+Texture g_WinText{};
 Texture g_EndTexture{};
 Sprite g_StartEndCogSprite{};
 Sprite g_InnerCogSprite{};
@@ -54,7 +55,6 @@ void UnCheckAllCells();
 void FilterOutCogs(int* cogsIndexes, int* connectedCogsIndexes, int& currentValidCogs);
 int ReturnCurrentCogsAmount();
 void PrintInformation();
-void TurnCogs();
 void DrawStaticStartAndEndCog();
 void InitStartAndEndSprite();
 void DrawStartSprite();
@@ -68,6 +68,10 @@ void UpdateOuterCogsBasedOnState();
 void DrawOuterCogsSprites();
 void DrawInnerCogSprites();
 void DrawInnerCogSprite(const Cell& cell);
+void InitWinText();
+void DrawWinText();
+void DrawCells();
+void SetSpriteProperties();
 #pragma endregion ownDeclarations
 
 #pragma region gameFunctions											
