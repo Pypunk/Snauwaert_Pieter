@@ -13,16 +13,31 @@ float g_WindowHeight{ 720 };
 
 #pragma region ownDeclarations
 // Declare your own global variables here
-const int g_AmountOfCells{25};
+
+struct Sprite
+{
+	utils::Texture texture;
+	int frames;
+	int cols;
+	float frameTime;
+	int currentFrame;
+	float accumulatedTime;
+};
+
+const int g_AmountOfCells{ 25 };
 const int g_Rows{ 5 };
 const int g_Cols{ 5 };
 const int g_AmountOfCogs{ 10 };
 const float g_CellSize{ 100 };
 int g_SelectedIndex{};
+bool g_IsFinished{ false };
 Point2f g_MousePos{};
 Cell g_Cells[g_AmountOfCells];
 Texture g_Cog{};
-Texture g_StartAndEndTexture{};
+Texture g_StartTexture{};
+Texture g_EndTexture{};
+Sprite g_StartEndCogSprite{};
+Sprite g_InnerCogSprite{};
 Cell g_SelectedCell{};
 
 // Declare your own functions here
@@ -40,6 +55,19 @@ void FilterOutCogs(int* cogsIndexes, int* connectedCogsIndexes, int& currentVali
 int ReturnCurrentCogsAmount();
 void PrintInformation();
 void TurnCogs();
+void DrawStaticStartAndEndCog();
+void InitStartAndEndSprite();
+void DrawStartSprite();
+void DrawEndSprite();
+void UpdateStartAndEndSprite(float elapsedSec);
+void UpdateInnerCogsSprite(float elapsedSec);
+void DrawStartSpriteReverse();
+void DrawEndSpriteReverse();
+void SetInnerCogsMovement();
+void UpdateOuterCogsBasedOnState();
+void DrawOuterCogsSprites();
+void DrawInnerCogSprites();
+void DrawInnerCogSprite(const Cell& cell);
 #pragma endregion ownDeclarations
 
 #pragma region gameFunctions											

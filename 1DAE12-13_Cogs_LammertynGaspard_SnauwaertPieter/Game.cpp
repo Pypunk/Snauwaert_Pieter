@@ -11,18 +11,7 @@ void Start()
 	Point2f Position{ g_WindowWidth / 2 - offset,g_WindowHeight / 2 - offset };
 	CreateGrid(Position, g_Cells, g_Cols, g_Rows, g_CellSize);
 	SetCurrentStates(g_Cells, g_AmountOfCells);
-	bool isCogCreated{ TextureFromFile("Resources/Cog.png", g_Cog) };
-	bool isStartAndEndCreated{ TextureFromFile("Resources/SilverCog.png", g_StartAndEndTexture) };
-
-	if (!isCogCreated)
-	{
-		std::cout << "Texture Cog.png could not be loaded\n";
-	}
-
-	if (!isStartAndEndCreated)
-	{
-		std::cout << "Texture SilverCog.png could not be loaded\n";
-	}
+	InitStartAndEndSprite();
 }
 
 void Draw()
@@ -42,40 +31,45 @@ void Draw()
 			break;
 		case RectState::cog:
 			DrawCell(g_Cells[i]);
-			DrawTexture(g_Cog, g_Cells[i].rect);
+			if (g_IsFinished) {
+				DrawInnerCogSprite(g_Cells[i]);
+			}
+			else
+			{
+				DrawTexture(g_Cog, g_Cells[i].rect);
+			}
+
 			break;
 		}
 	}
-	Rectf destRect{};
-	destRect = g_Cells[0].rect;
-	destRect.left -= g_Cells[0].rect.width;
-	DrawTexture(g_StartAndEndTexture, destRect);
-	destRect = g_Cells[g_AmountOfCells - 1].rect;
-	destRect.left += g_Cells[g_AmountOfCells - 1].rect.width;
-	DrawTexture(g_StartAndEndTexture, destRect);
+
+	//SetInnerCogsMovement();
+	if (g_IsFinished) {
+		DrawOuterCogsSprites();
+	}
+	else
+	{
+		DrawStaticStartAndEndCog();
+	}
 }
 
 void Update(float elapsedSec)
 {
 	// process input, do physics 
 
-	// e.g. Check keyboard state
-	//const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
-	//if ( pStates[SDL_SCANCODE_LEFT] )
-	//{
-	//	std::cout << "Left arrow key is down\n";
-	//}
-	//if ( pStates[SDL_SCANCODE_LEFT] && pStates[SDL_SCANCODE_UP])
-	//{
-	//	std::cout << "Left and up arrow keys are down\n";
-	//}
+	if (g_IsFinished) {
+		UpdateStartAndEndSprite(elapsedSec);
+		UpdateInnerCogsSprite(elapsedSec);
+	}
+
 }
 
 void End()
 {
 	// free game resources here
 	DeleteTexture(g_Cog);
-	DeleteTexture(g_StartAndEndTexture);
+	DeleteTexture(g_StartEndCogSprite.texture);
+	DeleteTexture(g_InnerCogSprite.texture);
 }
 #pragma endregion gameFunctions
 
@@ -83,6 +77,11 @@ void End()
 #pragma region inputHandling											
 void OnKeyDownEvent(SDL_Keycode key)
 {
+	if (g_IsFinished)
+	{
+		return;
+	}
+
 	bool isValidPos{};
 	switch (key)
 	{
@@ -148,6 +147,10 @@ void OnMouseDownEvent(const SDL_MouseButtonEvent& e)
 void OnMouseUpEvent(const SDL_MouseButtonEvent& e)
 {
 	//std::cout << "  [" << e.x << ", " << e.y << "]\n";
+	if (g_IsFinished)
+	{
+		return;
+	}
 	switch (e.button)
 	{
 	case SDL_BUTTON_LEFT:
@@ -252,10 +255,12 @@ void CheckStates()
 	UnCheckAllCells();
 
 
-	if (currentConnectedCogs >= g_AmountOfCells-1) {
+	if (currentConnectedCogs >= g_AmountOfCells - 1) {
 		if (g_Cells[0].state == utils::RectState::cog && g_Cells[g_AmountOfCells - 1].state == utils::RectState::cog)
 		{
 			std::cout << "Yes, we did it!!";
+			SetInnerCogsMovement();
+			g_IsFinished = true;
 		}
 	}
 }
@@ -268,6 +273,7 @@ void UnCheckAllCells()
 		}
 	}
 }
+
 
 void FilterOutCogs(int* cogsIndexes, int* connectedCogsIndexes, int& currentValidCogs)
 {
@@ -373,7 +379,7 @@ bool CheckNextCellY(int index, int previousIndex)
 	if (!isValidPos)
 	{
 		return false;
-}
+	}
 	const Cell cell1{ g_Cells[index] };
 	const Cell cell2{ g_Cells[previousIndex] };
 
@@ -388,5 +394,243 @@ bool CheckNextCellY(int index, int previousIndex)
 		return true;
 	}
 	return false;
+}
+
+void InitStartAndEndSprite()
+{
+	bool isCogCreated{ TextureFromFile("Resources/Cog.png", g_Cog) };
+	bool isStartAndEndCreated{ TextureFromFile("Resources/SilverCog.png", g_StartTexture) };
+	bool isStartAndEndSpriteCreated{ TextureFromFile("Resources/CogAnimSilver.png", g_StartEndCogSprite.texture) };
+	bool isInnerCogSpriteCreated{ TextureFromFile("Resources/CogAnim.png", g_InnerCogSprite.texture) };
+
+	if (!isCogCreated)
+	{
+		std::cout << "Texture Cog.png could not be loaded\n";
+	}
+
+	if (!isStartAndEndCreated)
+	{
+		std::cout << "Texture SilverCog.png could not be loaded\n";
+	}
+
+	if (!isStartAndEndSpriteCreated)
+	{
+		std::cout << "Texture CogAnimSilver.png could not be loaded\n";
+	}
+
+	if (!isInnerCogSpriteCreated)
+	{
+		std::cout << "Texture CogAnim.png could not be loaded\n";
+	}
+
+	g_StartEndCogSprite.frames = 16;
+	g_StartEndCogSprite.currentFrame = 0;
+	g_StartEndCogSprite.cols = 8;
+	g_StartEndCogSprite.frameTime = 1 / 7.f;
+
+	g_InnerCogSprite.frames = 16;
+	g_InnerCogSprite.currentFrame = 0;
+	g_InnerCogSprite.cols = 8;
+	g_InnerCogSprite.frameTime = 1 / 7.f;
+}
+
+void UpdateStartAndEndSprite(float elapsedSec) {
+	g_StartEndCogSprite.accumulatedTime += elapsedSec;
+
+	if (g_StartEndCogSprite.accumulatedTime >= elapsedSec)
+	{
+		++g_StartEndCogSprite.currentFrame %= g_StartEndCogSprite.frames;
+		g_StartEndCogSprite.accumulatedTime -= g_StartEndCogSprite.frameTime;
+	}
+}
+
+void UpdateInnerCogsSprite(float elapsedSec) {
+	g_InnerCogSprite.accumulatedTime += elapsedSec;
+
+	if (g_InnerCogSprite.accumulatedTime >= elapsedSec)
+	{
+		++g_InnerCogSprite.currentFrame %= g_InnerCogSprite.frames;
+		g_InnerCogSprite.accumulatedTime -= g_InnerCogSprite.frameTime;
+	}
+}
+
+void DrawStaticStartAndEndCog()
+{
+	Rectf destRect{};
+	destRect = g_Cells[0].rect;
+	destRect.left -= g_Cells[0].rect.width;
+	DrawTexture(g_StartTexture, destRect);
+	destRect = g_Cells[g_AmountOfCells - 1].rect;
+	destRect.left += g_Cells[g_AmountOfCells - 1].rect.width;
+	DrawTexture(g_StartTexture, destRect);
+}
+
+void DrawInnerCogSprite(const Cell& cell)
+{
+	Rectf srcRect{};
+	const int row{ g_InnerCogSprite.currentFrame / g_InnerCogSprite.cols };
+	srcRect.width = g_InnerCogSprite.texture.width / g_InnerCogSprite.cols;
+	srcRect.height = float(g_InnerCogSprite.texture.height / (g_InnerCogSprite.frames / g_InnerCogSprite.cols));
+	srcRect.left = float(g_InnerCogSprite.currentFrame % g_InnerCogSprite.cols) * srcRect.width;
+	srcRect.bottom = float(row + 1) * srcRect.height;
+
+	Rectf destRect{};
+	destRect = cell.rect;
+	DrawTexture(g_InnerCogSprite.texture, destRect, srcRect);
+}
+
+void DrawInnerCogSpriteReverse(const Cell& cell)
+{
+	Rectf srcRect{};
+	const int row{ (g_StartEndCogSprite.frames - 1 - g_StartEndCogSprite.currentFrame) / g_StartEndCogSprite.cols };
+	srcRect.width = g_StartEndCogSprite.texture.width / g_StartEndCogSprite.cols;
+	srcRect.height = float(g_StartEndCogSprite.texture.height / (g_StartEndCogSprite.frames / g_StartEndCogSprite.cols));
+	srcRect.left = float(g_StartEndCogSprite.currentFrame % g_StartEndCogSprite.cols) * srcRect.width;
+	srcRect.bottom = float(row + 1) * srcRect.height;
+
+	Rectf destRect{};
+	destRect = cell.rect;
+	DrawTexture(g_InnerCogSprite.texture, destRect, srcRect);
+}
+
+void DrawStartSprite()
+{
+	Rectf srcRect{};
+	const int row{ g_StartEndCogSprite.currentFrame / g_StartEndCogSprite.cols };
+	srcRect.width = g_StartEndCogSprite.texture.width / g_StartEndCogSprite.cols;
+	srcRect.height = float(g_StartEndCogSprite.texture.height / (g_StartEndCogSprite.frames / g_StartEndCogSprite.cols));
+	srcRect.left = float(g_StartEndCogSprite.currentFrame % g_StartEndCogSprite.cols) * srcRect.width;
+	srcRect.bottom = float(row + 1) * srcRect.height;
+
+	Rectf destRect{};
+	destRect = g_Cells[0].rect;
+	destRect.left -= g_Cells[0].rect.width;
+	DrawTexture(g_StartEndCogSprite.texture, destRect, srcRect);
+}
+
+void DrawEndSprite()
+{
+	Rectf srcRect{};
+	const int row{ g_StartEndCogSprite.currentFrame / g_StartEndCogSprite.cols };
+	srcRect.width = g_StartEndCogSprite.texture.width / g_StartEndCogSprite.cols;
+	srcRect.height = float(g_StartEndCogSprite.texture.height / (g_StartEndCogSprite.frames / g_StartEndCogSprite.cols));
+	srcRect.left = float(g_StartEndCogSprite.currentFrame % g_StartEndCogSprite.cols) * srcRect.width;
+	srcRect.bottom = float(row + 1) * srcRect.height;
+
+	Rectf destRect{};
+	destRect = g_Cells[g_AmountOfCells - 1].rect;
+	destRect.left += g_Cells[g_AmountOfCells - 1].rect.width;
+	DrawTexture(g_StartEndCogSprite.texture, destRect, srcRect);
+}
+
+void DrawStartSpriteReverse()
+{
+	Rectf srcRect{};
+	const int row{ (g_StartEndCogSprite.frames - 1 - g_StartEndCogSprite.currentFrame) / g_StartEndCogSprite.cols };
+	srcRect.width = g_StartEndCogSprite.texture.width / g_StartEndCogSprite.cols;
+	srcRect.height = float(g_StartEndCogSprite.texture.height / (g_StartEndCogSprite.frames / g_StartEndCogSprite.cols));
+	srcRect.left = float(g_StartEndCogSprite.currentFrame % g_StartEndCogSprite.cols) * srcRect.width;
+	srcRect.bottom = float(row + 1) * srcRect.height;
+
+	Rectf destRect{};
+	destRect = g_Cells[0].rect;
+	destRect.left -= g_Cells[0].rect.width;
+	DrawTexture(g_StartEndCogSprite.texture, destRect, srcRect);
+}
+
+void DrawEndSpriteReverse()
+{
+	Rectf srcRect{};
+	const int row{ (g_StartEndCogSprite.frames - 1 - g_StartEndCogSprite.currentFrame) / g_StartEndCogSprite.cols };
+	srcRect.width = g_StartEndCogSprite.texture.width / g_StartEndCogSprite.cols;
+	srcRect.height = float(g_StartEndCogSprite.texture.height / (g_StartEndCogSprite.frames / g_StartEndCogSprite.cols));
+	srcRect.left = float(g_StartEndCogSprite.currentFrame % g_StartEndCogSprite.cols) * srcRect.width;
+	srcRect.bottom = float(row + 1) * srcRect.height;
+
+	Rectf destRect{};
+	destRect = g_Cells[g_AmountOfCells - 1].rect;
+	destRect.left += g_Cells[g_AmountOfCells - 1].rect.width;
+	DrawTexture(g_StartEndCogSprite.texture, destRect, srcRect);
+}
+
+void UpdateCogsBasedOnState() {
+	UpdateOuterCogsBasedOnState();
+}
+
+void UpdateOuterCogsBasedOnState() {
+	if (g_Cells[0].movingState == MovingState::forwards) {
+		DrawStartSprite();
+	}
+
+	if (g_Cells[0].movingState == MovingState::backwards) {
+		DrawStartSpriteReverse();
+	}
+
+	if (g_Cells[g_AmountOfCells - 1].movingState == MovingState::forwards) {
+		DrawEndSprite();
+	}
+
+	if (g_Cells[g_AmountOfCells - 1].movingState == MovingState::backwards) {
+		DrawEndSpriteReverse();
+	}
+}
+
+void SetInnerCogsMovement()
+{
+	int cogsIndexes[g_AmountOfCogs]{};
+	int filteredCogs[g_AmountOfCogs]{};
+	int currentValidCogs{};
+	FilterOutCogs(cogsIndexes, filteredCogs, currentValidCogs);
+	for (int i{}; i < currentValidCogs; ++i)
+	{
+		const bool mustMoveForward{ (i + 1) % 2 == 0 };
+		if (mustMoveForward) {
+			g_Cells[cogsIndexes[i]].movingState = MovingState::forwards;
+		}
+		else
+		{
+			g_Cells[cogsIndexes[i]].movingState = MovingState::backwards;
+		}
+	}
+}
+
+void DrawOuterCogsSprites()
+{
+	if (g_Cells[0].movingState == MovingState::forwards)
+	{
+		DrawStartSpriteReverse();
+	}
+	else
+	{
+		DrawStartSprite();
+	}
+
+	if (g_Cells[g_AmountOfCells - 1].movingState == MovingState::forwards)
+	{
+		DrawEndSpriteReverse();
+	}
+	else
+	{
+		DrawEndSprite();
+	}
+}
+
+void DrawInnerCogSprites()
+{
+	for (int i{}; i < g_AmountOfCells; ++i)
+	{
+		const Cell cell{ g_Cells[i] };
+		if (cell.state != RectState::cog) {
+			return;
+		}
+		if (cell.movingState == MovingState::forwards)
+		{
+			DrawInnerCogSprite(cell);
+		}
+		if (cell.movingState == MovingState::backwards)
+		{
+			DrawInnerCogSpriteReverse(cell);
+		}
+	}
 }
 #pragma endregion ownDefinitions

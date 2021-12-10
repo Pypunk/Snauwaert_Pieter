@@ -88,7 +88,7 @@ namespace utils
 	enum class MovingState
 	{
 		forwards,
-		backwards
+		backwards,
 	};
 	enum class RectState
 	{
