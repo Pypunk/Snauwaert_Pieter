@@ -238,7 +238,6 @@ void CheckStates()
 	if (currentConnectedCogs >= g_AmountOfCells - 1) {
 		if (g_Cells[0].state == utils::RectState::cog && g_Cells[g_AmountOfCells - 1].state == utils::RectState::cog)
 		{
-			std::cout << "Yes, we did it!!";
 			SetInnerCogsMovement();
 			g_IsFinished = true;
 		}
@@ -296,21 +295,19 @@ int ReturnCurrentCogsAmount()
 			cellToCheck = g_Cells[currentCheckIndex];
 		}
 	}
-	std::cout << currentCheckIndex << std::endl;
 	return currentCheckIndex;
 }
 
 void PrintInformation()
 {
 	std::cout << "--- Cogs ---\n\n";
-	std::cout << "In the middle of the screen you have grid. It's randomly filled with cogs.\n";
-	std::cout << "The goal is to connect cogs from one point to another.\n";
+	std::cout << "In the middle of the screen, you have a grid. It's randomly filled with cogs.\n";
 	std::cout << "Connect the cogs from the bottom left to the top right corner.\n";
 	std::cout << "You can do this by moving cells to the only empty spot.\n\n";
 	std::cout << "--- Controls ---\n\n";
 	std::cout << "Click on a cell to select it.\n";
-	std::cout << "Arrow keys to move selected cell.\n\n";
-	std::cout << "Made by Gaspard Lammertyn and Pieter Snauwaert\n";
+	std::cout << "Press the Arrow keys to move the selected cell.\n\n";
+	std::cout << "Made by Gaspard Lammertyn and Pieter Snauwaert.\n";
 }
 
 bool IsNotConnected(int index) {
