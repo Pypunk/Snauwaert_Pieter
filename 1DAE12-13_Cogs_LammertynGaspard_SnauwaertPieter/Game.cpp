@@ -87,7 +87,6 @@ void OnKeyDownEvent(SDL_Keycode key)
 	case SDLK_UP:
 		isValidPos = CheckCellPositionY(g_SelectedIndex, g_SelectedIndex + 5);
 		if (!isValidPos) break;
-		CheckCellPositionY(g_SelectedIndex, g_SelectedIndex + 5);
 		g_SelectedCell.direction = Direction::up;
 		CheckAndMoveCell(g_SelectedIndex, g_SelectedIndex + 5);
 		break;
@@ -195,7 +194,7 @@ bool CheckCellPositionX(int currentIndex, int secondIndex)
 }
 bool CheckCellPositionY(int currentIndex, int secondIndex)
 {
-	if (currentIndex == 0 && (secondIndex < 0 || secondIndex > g_AmountOfCells - 1))
+	if (currentIndex == 0 && (secondIndex < 0) || secondIndex > g_AmountOfCells - 1)
 	{
 		return false;
 	}
