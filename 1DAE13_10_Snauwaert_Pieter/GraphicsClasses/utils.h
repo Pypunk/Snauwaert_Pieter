@@ -64,7 +64,6 @@ namespace utils
 		float width;
 		float height;
 	};
-
 	bool TextureFromFile(const std::string& path, Texture& texture);
 	bool TextureFromString(const std::string& text, TTF_Font* pFont, const Color4f& textColor, Texture& texture);
 	bool TextureFromString(const std::string& text, const std::string& fontPath, int ptSize, const Color4f& textColor, Texture& texture);
@@ -81,20 +80,21 @@ namespace utils
 	Point2f GetMiddle(float p1x, float p1y, float p2x, float p2y);
 	Point2f GetMiddleOfRect(const Rectf& rect);
 	bool IsPointInCircle(const Point2f& p, const Circlef& c);
+	bool IsPointInEllipse(const Point2f& p, const Ellipsef& e);
 	bool IsPointInRect(const Point2f& p, const Rectf& r);
 	bool IsOverlapping(const Rectf& r1, const Rectf& r2);
 	bool IsOverLapping(const Circlef& c1, const Circlef& c2);
 #pragma endregion CollisionFunctionality
 
 #pragma region OwnFunctions
-	int GetRandInt(int min, int max);
-	float GetRandFloat(float min, float max);
+	int GetRand(int min, int max);
+	float GetRand(float min, float max);
+	Color4f GetRandColor();
 	float ConvertToRadians(float degrees);
 	float ConvertToDegrees(float radians);
 	Point2f CreateCoordinatesFromRads(float radius, float radians, const Point2f& offset = {});
 	int GetIndex(int rowIdx, int colIdx, int nrCols);
-	int GetRowIndex(int index, int nrCols);
-	int GetColIndex(int index, int nrCols);
+	void CreateGrid(Rectf* pgrid, int cols, int rows, float cellSize);
 #pragma endregion OwnFunctions
 
 #pragma region drawFunctions

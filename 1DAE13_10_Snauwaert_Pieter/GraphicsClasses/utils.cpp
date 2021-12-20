@@ -537,6 +537,11 @@ namespace utils
 		return (p.x >= c.center.x - c.radius && p.x <= c.center.x + c.radius
 			&& p.y >= c.center.y - c.radius && p.y <= c.center.y + c.radius);
 	}
+	bool IsPointInEllipse(const Point2f& p, const Ellipsef& e)
+	{
+		return (p.x >= e.center.x - e.radiusX && p.x <= e.center.x + e.radiusX
+			&& p.y >= e.center.y - e.radiusY && p.y <= e.center.y + e.radiusY);
+	}
 	bool IsPointInRect(const Point2f& p, const Rectf& r)
 	{
 		return (p.x >= r.left && p.x <= r.left + r.width &&
@@ -565,14 +570,18 @@ namespace utils
 #pragma endregion CollisionFunctionality
 
 #pragma region OwnFunctions
-	int GetRandInt(int min, int max)
+	int GetRand(int min, int max)
 	{
 		return ((rand() % int(max)) + min);
 	}
 
-	float GetRandFloat(float min, float max)
+	float GetRand(float min, float max)
 	{
 		return ((rand() % int(max * 100)) + min * 100) / 100;
+	}
+	Color4f GetRandColor()
+	{
+		return Color4f{ GetRand(0.f,255.f) / 255.f,GetRand(0.f,255.f)/255.f,GetRand(0.f,255.f)/255.f,1 };
 	}
 	float ConvertToRadians(float degrees)
 	{
@@ -592,13 +601,19 @@ namespace utils
 	{
 		return rowIdx * nrCols + colIdx;
 	}
-	int GetRowIndex(int index, int nrCols)
+	void CreateGrid(Rectf* pgrid, int cols, int rows, float cellSize)
 	{
-		return index/nrCols;
-	}
-	int GetColIndex(int index, int nrCols)
-	{
-		return index % nrCols;
+		Point2f position{ 10,10 };
+		for (int i{}; i < rows; ++i)
+		{
+			for (int j{}; j < cols; ++j)
+			{
+				pgrid[GetIndex(i, j, cols)] = Rectf{ position.x,position.y,cellSize,cellSize };
+				position.x += cellSize;
+			}
+			position.x = 10;
+			position.y += cellSize;
+		}
 	}
 #pragma endregion OwnFunctions
 
