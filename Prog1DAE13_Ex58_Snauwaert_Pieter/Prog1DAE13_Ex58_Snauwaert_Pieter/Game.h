@@ -1,33 +1,52 @@
 #pragma once
 using namespace utils;
-class Tile;
+class Vehicle;
 #pragma region gameInformation
 // Set your name and group in the title here
-std::string g_WindowTitle{ "Project name - Name, firstname - 1DAExx" };
+std::string g_WindowTitle{ "Ex58 - Snauwaert, Pieter - 1DAE13" };
 
 // Change the window dimensions here
-float g_WindowWidth{ 400 };
-float g_WindowHeight{ 400 };
+float g_WindowWidth{ 500 };
+float g_WindowHeight{ 300 };
 #pragma endregion gameInformation
 
 
 
 #pragma region ownDeclarations
 // Declare your own global variables here
-const int g_AmountOfTiles{ 4 };
-Tile* g_pTiles[g_AmountOfTiles]{ nullptr };
-int g_CurrentAnimalFrame{ };
-Texture g_AnimalNameTexture{};
-Rectf g_AnimalNamePos{};
-bool g_IsSolved;
-Rectf g_SrcRect{};
-Rectf g_Border{};
-Color4f g_BorderColor{ 1,0,0,1 };
+Texture g_StreetTexture{};
+Texture g_ChickenTexture{};
+Point2f g_ChickenPos{};
+Texture g_Text{};
+Rectf g_DestRect{};
+float g_Speed{ 100.f };
+const int g_FontSize{ 40 };
+enum class GameState
+{
+	play,
+	pause,
+	win,
+	lose,
+	reset
+};
+GameState g_CurrentState{};
+const int g_AmountOfVehicles{ 5 };
+Vehicle* g_pVehicles[g_AmountOfVehicles]{};
+enum class Direction
+{
+	left,
+	right,
+	front
+};
+Direction g_CurrentDirection{ Direction::front };
 // Declare your own functions here
-void CreateTiles(float size);
-void DeleteTiles();
-void DrawTiles();
-bool CheckIsSolved();
+void ResetGame();
+void DrawChicken();
+void DrawVehicles();
+void DrawTexts();
+void UpdateVehicles(float elapsedSec);
+void UpdateChicken(float elapsedSec);
+void PrintInfo();
 #pragma endregion ownDeclarations
 
 #pragma region gameFunctions											

@@ -6,10 +6,14 @@ Tile::Tile(const Rectf& dstRect, const std::string& textPath, int nrAnimals)
 	:m_Shape{ dstRect }
 	, m_AmountOfAnimals{ nrAnimals }
 	, m_Texture{}
-	,m_IsActive{false}
-	,m_CurrentAnimal{0}
+	, m_IsActive{ false }
+	, m_CurrentAnimal{}
+	, m_HitRegionLeft{ dstRect.left,dstRect.bottom,dstRect.width/4.f,dstRect.height/4.f }
+	, m_HitRegionRight{ dstRect.left + dstRect.width - dstRect.width/4.f,dstRect.bottom,dstRect.width/4.f,dstRect.height/4.f }
+
 {
 	TextureFromFile(textPath, m_Texture);
+	Randomize();
 }
 
 Tile::~Tile()
@@ -27,10 +31,6 @@ void Tile::Draw()
 	DrawTexture(m_Texture, m_Shape, srcRect);
 	if (m_IsActive)
 	{
-		const float width{ m_Shape.width / 4.f };
-		const float height{ m_Shape.height / 4.f };
-		m_HitRegionLeft = Rectf{ m_Shape.left,m_Shape.bottom,width,height };
-		m_HitRegionRight = Rectf{ m_Shape.left + m_Shape.width - width,m_Shape.bottom,width,height };
 		SetColor(1.f, 1.f, 1.f, 0.2f);
 		FillRect(m_Shape);
 		SetColor(1, 0, 0, 1);

@@ -9,8 +9,8 @@ void Start()
 	// initialize game resources here
 	const float size{ 128.f };
 	CreateTiles(size);
-	TextureFromFile("Resources/Names.png", g_AnimalName);
-	g_AnimalNamePos = Rectf{ g_WindowWidth / 2.f - size,g_WindowHeight/2.f-size-30.f,size * 2.f,g_AnimalName.height / 6.f };
+	TextureFromFile("Resources/Names.png", g_AnimalNameTexture);
+	g_AnimalNamePos = Rectf{ g_WindowWidth / 2.f - size,g_WindowHeight/2.f-size-30.f,size * 2.f,g_AnimalNameTexture.height / 6.f };
 	g_Border = Rectf{ g_AnimalNamePos.left,g_AnimalNamePos.bottom + 30.f,size * 2.f,size * 2.f };
 }
 
@@ -20,32 +20,22 @@ void Draw()
 
 	// Put your own draw statements here
 	DrawTiles();
-	g_SrcRect.width = g_AnimalName.width;
-	g_SrcRect.height = g_AnimalName.height/6;
+	g_SrcRect.width = g_AnimalNameTexture.width;
+	g_SrcRect.height = g_AnimalNameTexture.height/6;
 	g_SrcRect.bottom = g_SrcRect.height*g_CurrentAnimalFrame;
 	g_SrcRect.left = 0.f;
-	SetColor(1, 0, 0, 1);
+	SetColor(g_BorderColor);
 	DrawRect(g_Border, 2.f);
 	if (g_IsSolved)
 	{
-		DrawTexture(g_AnimalName, g_AnimalNamePos, g_SrcRect);
+		g_BorderColor = Color4f{ 0,1,0,1 };
+		DrawTexture(g_AnimalNameTexture, g_AnimalNamePos, g_SrcRect);
 	}
 }
 
 void Update(float elapsedSec)
 {
 	// process input, do physics 
-	if (g_pTiles[0]->GetCurrentAnimal() == g_pTiles[1]->GetCurrentAnimal()
-		&& g_pTiles[1]->GetCurrentAnimal() == g_pTiles[2]->GetCurrentAnimal()
-		&& g_pTiles[2]->GetCurrentAnimal() == g_pTiles[3]->GetCurrentAnimal())
-	{
-		g_CurrentAnimalFrame = g_pTiles[0]->GetCurrentAnimal() + 1;
-		g_IsSolved = true;
-		for (int i{}; i < g_AmountOfTiles; ++i)
-		{
-			g_pTiles[i]->Deactivate();
-		}
-	}
 	// e.g. Check keyboard state
 	//const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
 	//if ( pStates[SDL_SCANCODE_RIGHT] )
@@ -62,7 +52,7 @@ void End()
 {
 	// free game resources here
 	DeleteTiles();
-	DeleteTexture(g_AnimalName);
+	DeleteTexture(g_AnimalNameTexture);
 }
 #pragma endregion gameFunctions
 
@@ -82,6 +72,7 @@ void OnKeyUpEvent(SDL_Keycode key)
 			g_pTiles[i]->Randomize();
 			g_IsSolved = false;
 		}
+		g_BorderColor = Color4f{ 1,0,0,1 };
 		break;
 	}
 }
@@ -90,9 +81,12 @@ void OnMouseMotionEvent(const SDL_MouseMotionEvent& e)
 {
 	//std::cout << "  [" << e.x << ", " << e.y << "]\n";
 	Point2f mousePos{ float( e.x ), float( g_WindowHeight - e.y ) };
-	for (int i{}; i < g_AmountOfTiles; ++i)
+	if (!g_IsSolved)
 	{
-		g_pTiles[i]->CheckActivation(mousePos);
+		for (int i{}; i < g_AmountOfTiles; ++i)
+		{
+			g_pTiles[i]->CheckActivation(mousePos);
+		}
 	}
 }
 
@@ -108,6 +102,7 @@ void OnMouseDownEvent(const SDL_MouseButtonEvent& e)
 			{
 				g_pTiles[i]->CheckHit(mousePos);
 			}
+			g_IsSolved = CheckIsSolved();
 			break;
 		}
 	}
@@ -150,7 +145,6 @@ void CreateTiles(float size)
 			path = "Resources/Tiles" + std::to_string(i) + jString + ".png";
 			g_pTiles[GetIndex(i, j, 2)] = new Tile(positionRect, path, 6);
 			positionRect.left += size;
-			g_pTiles[GetIndex(i, j, 2)]->Randomize();
 		}
 		positionRect.left = g_WindowWidth / 2.f - size;
 		positionRect.bottom -= size;
@@ -170,5 +164,20 @@ void DrawTiles()
 	{
 		g_pTiles[i]->Draw();
 	}
+}
+bool CheckIsSolved()
+{
+	if (g_pTiles[0]->GetCurrentAnimal() == g_pTiles[1]->GetCurrentAnimal()
+		&& g_pTiles[1]->GetCurrentAnimal() == g_pTiles[2]->GetCurrentAnimal()
+		&& g_pTiles[2]->GetCurrentAnimal() == g_pTiles[3]->GetCurrentAnimal())
+	{
+		g_CurrentAnimalFrame = g_pTiles[0]->GetCurrentAnimal() + 1;
+		for (int i{}; i < g_AmountOfTiles; ++i)
+		{
+			g_pTiles[i]->Deactivate();
+		}
+		return true;
+	}
+	return false;
 }
 #pragma endregion ownDefinitions
