@@ -1,12 +1,13 @@
 #include "pch.h"
 #include "Game.h"
-#include "Smiley.h"
 #include "utils.h"
 #include <iostream>
-#include <algorithm>
+#include "Enemy.h"
+#include "Avatar.h"
 
 Game::Game( const Window& window ) 
 	:m_Window{ window }
+	, m_pAvatar{ new Avatar{Point2f{m_Window.width / 2.f,60.f},50.f,50.f} }
 {
 	Initialize( );
 }
@@ -18,47 +19,36 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	Point2f position{};
-	for (int i{}; i < m_AmountOfSmileys; ++i)
+	float width{ 25.f };
+	float height{ 25.f };
+	Point2f center{ width,m_Window.height - height };
+	for (int i{}; i < 10; ++i)
 	{
-		m_pSmileys[i] = new Smiley{position};
-		position.x += 50.f;
-		position.y = utils::GetRand(0.f, m_Window.height);
+		for (int j{}; j < 4; ++j)
+		{
+			m_pEnemies[utils::GetIndex(j, i, 10)] = new Enemy{ center,width,height };
+			center.y -= height * 2.f;
+		}
+		center.y = m_Window.height - height;
+		center.x += width * 2.f;
 	}
+	m_pAvatar->SetBoundaries(Rectf{ 0,0,m_Window.width,m_Window.height });
 }
 
 void Game::Cleanup( )
 {
-	for (Smiley* i : m_pSmileys)
+	for (Enemy* i : m_pEnemies)
 	{
 		delete i;
 		i = nullptr;
 	}
+	delete m_pAvatar;
+	m_pAvatar = nullptr;
 }
 
 void Game::Update( float elapsedSec )
 {
-	Rectf boundingRect{ 0,0,m_Window.width,m_Window.height };
-	Rectf safeRect{ 50,50,m_Window.width - 100,m_Window.height - 100 };
-	std::vector<float> smileyPositions;
-	for (int i{}; i < m_AmountOfSmileys; ++i)
-	{
-		m_pSmileys[i]->Update(elapsedSec, boundingRect, safeRect);
-		smileyPositions.push_back(m_pSmileys[i]->GetPosition().y);
-	}
-	float highestPoint{ *std::max_element(smileyPositions.begin(), smileyPositions.end()) };
-	for (int i{}; i < m_AmountOfSmileys; ++i)
-	{
-		if (m_pSmileys[i]->GetPosition().y == highestPoint)
-		{
-			m_pSmileys[i]->SetHighest(true);
-		}
-		else
-		{
-			m_pSmileys[i]->SetHighest(false);
-		}
-	}
-	smileyPositions.clear();
+	m_pAvatar->Update(elapsedSec,m_pEnemies,m_AmountOfEnemies);
 	// Check keyboard state
 	//const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
 	//if ( pStates[SDL_SCANCODE_RIGHT] )
@@ -74,14 +64,17 @@ void Game::Update( float elapsedSec )
 void Game::Draw( ) const
 {
 	ClearBackground( );
-	DrawSmileys();
-	Rectf safeRect{ 50,50,m_Window.width - 100,m_Window.height - 100 };
-	utils::DrawRect(safeRect);
+	for (int i{}; i < m_AmountOfEnemies; ++i)
+	{
+		m_pEnemies[i]->Draw();
+	}
+	m_pAvatar->Draw();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 {
 	//std::cout << "KEYDOWN event: " << e.keysym.sym << std::endl;
+	m_pAvatar->ProcessKeyDownEvent(e);
 }
 
 void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
@@ -113,10 +106,6 @@ void Game::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
 	switch ( e.button )
 	{
 	case SDL_BUTTON_LEFT:
-		for (Smiley* i : m_pSmileys)
-		{
-			i->HitTest(mousePos);
-		}
 		break;
 	}
 }
@@ -142,12 +131,4 @@ void Game::ClearBackground( ) const
 {
 	glClearColor( 0.0f, 0.0f, 0.3f, 1.0f );
 	glClear( GL_COLOR_BUFFER_BIT );
-}
-
-void Game::DrawSmileys() const
-{
-	for (Smiley* i : m_pSmileys)
-	{
-		i->Draw();
-	}
 }

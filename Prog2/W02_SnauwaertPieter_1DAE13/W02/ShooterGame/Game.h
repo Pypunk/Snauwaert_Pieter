@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
-class Smiley;
+class Enemy;
+class Avatar;
 class Game final
 {
 public:
@@ -23,9 +24,10 @@ public:
 
 private:
 	// DATA MEMBERS
-	static const int m_AmountOfSmileys{ 10 };
+	static const int m_AmountOfEnemies{ 40 };
 	const Window m_Window;
-	Smiley* m_pSmileys[m_AmountOfSmileys];
+	Enemy* m_pEnemies[m_AmountOfEnemies];
+	Avatar* m_pAvatar;
 	// FUNCTIONS
 	void Initialize( );
 	void Cleanup( );
