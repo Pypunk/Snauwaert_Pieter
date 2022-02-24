@@ -19,17 +19,19 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	float width{ 25.f };
-	float height{ 25.f };
-	Point2f center{ width,m_Window.height - height };
+	const float width{ 25.f };
+	const float height{ 25.f };
+	Point2f center{ width,m_Window.height+height*5.f };
+	const int cols{ 10 };
+	const int rows{ 10 };
 	for (int i{}; i < 10; ++i)
 	{
-		for (int j{}; j < 4; ++j)
+		for (int j{}; j < 10; ++j)
 		{
 			m_pEnemies[utils::GetIndex(j, i, 10)] = new Enemy{ center,width,height };
 			center.y -= height * 2.f;
 		}
-		center.y = m_Window.height - height;
+		center.y = m_Window.height+height*5.f;
 		center.x += width * 2.f;
 	}
 	m_pAvatar->SetBoundaries(Rectf{ 0,0,m_Window.width,m_Window.height });
@@ -48,6 +50,10 @@ void Game::Cleanup( )
 
 void Game::Update( float elapsedSec )
 {
+	for (Enemy* i : m_pEnemies)
+	{
+		i->Update(elapsedSec);
+	}
 	m_pAvatar->Update(elapsedSec,m_pEnemies,m_AmountOfEnemies);
 	// Check keyboard state
 	//const Uint8 *pStates = SDL_GetKeyboardState( nullptr );

@@ -38,8 +38,8 @@ void Bullet::Draw() const
 	Rectf shape{};
 	shape.left = m_Center.x - m_Width / 2.f;
 	shape.bottom = m_Center.y - m_Height / 2.f;
-	shape.width = m_Width;
-	shape.height = m_Height;
+	shape.width = m_Width*0.5f;
+	shape.height = m_Height*0.5f;
 	if (m_IsActivated)
 	{
 		m_pTexture->Draw(shape);
@@ -83,8 +83,8 @@ void Bullet::CheckBoundaries()
 	Rectf shape{};
 	shape.left = m_Center.x - m_Width / 2.f;
 	shape.bottom = m_Center.y - m_Height / 2.f;
-	shape.width = m_Width;
-	shape.height = m_Height;
+	shape.width = m_Width * 0.5f;
+	shape.height = m_Height * 0.5f;
 	if (!utils::IsOverlapping(shape, m_Boundaries))
 	{
 		m_IsActivated = false;
@@ -96,8 +96,8 @@ void Bullet::CheckEnemiesHit(Enemy** pEnemies, int numEnemies)
 	Rectf shape{};
 	shape.left = m_Center.x - m_Width / 2.f;
 	shape.bottom = m_Center.y - m_Height / 2.f;
-	shape.width = m_Width;
-	shape.height = m_Height;
+	shape.width = m_Width * 0.5f;
+	shape.height = m_Height * 0.5f;
 	if (m_IsActivated)
 	{
 		for (int i{}; i < numEnemies; ++i)

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "PowerUpManager.h"
+#include "utils.h"
 
 PowerUpManager::PowerUpManager()
 	:m_pItems{}
@@ -49,11 +50,19 @@ bool PowerUpManager::HitItem(const Rectf& rect)
 	{
 		if (m_pItems[i]->IsOverlapping(rect))
 		{
-			delete m_pItems[i];
-			m_pItems[i] = nullptr;
-			m_pItems.erase(m_pItems.begin() + i);
+			SwapWithLast(m_pItems, i);
+			delete m_pItems[m_pItems.size() - 1];
+			m_pItems[m_pItems.size() - 1] = nullptr;
+			m_pItems.pop_back();
 			return true;
 		}
 	}
 	return false;
+}
+
+void PowerUpManager::SwapWithLast(std::vector<PowerUp*>& powerUpsToSwap, int idx1)
+{
+	PowerUp* temp{ powerUpsToSwap[idx1] };
+	powerUpsToSwap[idx1] = powerUpsToSwap[powerUpsToSwap.size() - 1];
+	powerUpsToSwap[powerUpsToSwap.size()-1] = temp;
 }

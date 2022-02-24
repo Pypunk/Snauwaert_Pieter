@@ -6,6 +6,7 @@ public:
 	Enemy();
 	Enemy(const Point2f& center, float width, float height);
 	~Enemy();
+	void Update(float elapsedSec);
 	void Draw() const;
 	bool DoHitTest(const Rectf& other);
 	void SetCenter(const Point2f& center);
@@ -17,5 +18,7 @@ private:
 	float m_Height;
 	bool m_IsDead;
 	Texture* m_pTexture;
+	float m_MoveSec;
+	float m_CurrentSec;
 };
 

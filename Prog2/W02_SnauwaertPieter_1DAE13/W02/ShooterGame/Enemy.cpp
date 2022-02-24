@@ -8,6 +8,8 @@ Enemy::Enemy()
 	, m_Height{}
 	, m_Width{}
 	,m_IsDead{false}
+	,m_MoveSec{3}
+	,m_CurrentSec{0}
 {
 	m_pTexture = new Texture{ "Resources/EnemySpaceship.png" };
 }
@@ -17,6 +19,8 @@ Enemy::Enemy(const Point2f& center, float width, float height)
 	,m_Width{width}
 	,m_Height{height}
 	,m_IsDead{false}
+	,m_MoveSec{3}
+	,m_CurrentSec{0}
 {
 	m_pTexture = new Texture{ "Resources/EnemySpaceship.png" };
 }
@@ -25,6 +29,16 @@ Enemy::~Enemy()
 {
 	delete m_pTexture;
 	m_pTexture = nullptr;
+}
+
+void Enemy::Update(float elapsedSec)
+{
+	m_CurrentSec += elapsedSec;
+	if (m_MoveSec <= m_CurrentSec)
+	{
+		m_Center.y -= m_Height;
+		m_CurrentSec = 0.f;
+	}
 }
 
 void Enemy::Draw() const

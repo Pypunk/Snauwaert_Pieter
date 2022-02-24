@@ -24,4 +24,5 @@ private:
 	std::vector<PowerUp*> m_pItems;
 
 	// Your helper functions
+	void SwapWithLast(std::vector<PowerUp*>& powerUpsToSwap, int idx1);
 };

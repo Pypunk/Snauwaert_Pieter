@@ -24,7 +24,7 @@ public:
 
 private:
 	// DATA MEMBERS
-	static const int m_AmountOfEnemies{ 40 };
+	static const int m_AmountOfEnemies{ 100 };
 	const Window m_Window;
 	Enemy* m_pEnemies[m_AmountOfEnemies];
 	Avatar* m_pAvatar;
