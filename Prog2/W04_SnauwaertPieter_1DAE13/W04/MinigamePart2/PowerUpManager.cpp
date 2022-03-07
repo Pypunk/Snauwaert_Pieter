@@ -51,8 +51,8 @@ bool PowerUpManager::HitItem(const Rectf& rect)
 		if (m_pItems[i]->IsOverlapping(rect))
 		{
 			SwapWithLast(m_pItems, i);
-			delete m_pItems.back();
-			m_pItems.back() = nullptr;
+			delete m_pItems[m_pItems.size() - 1];
+			m_pItems[m_pItems.size() - 1] = nullptr;
 			m_pItems.pop_back();
 			return true;
 		}
@@ -63,6 +63,6 @@ bool PowerUpManager::HitItem(const Rectf& rect)
 void PowerUpManager::SwapWithLast(std::vector<PowerUp*>& powerUpsToSwap, int idx1)
 {
 	PowerUp* temp{ powerUpsToSwap[idx1] };
-	powerUpsToSwap[idx1] = powerUpsToSwap.back();
-	powerUpsToSwap.back() = temp;
+	powerUpsToSwap[idx1] = powerUpsToSwap[powerUpsToSwap.size() - 1];
+	powerUpsToSwap[powerUpsToSwap.size()-1] = temp;
 }
