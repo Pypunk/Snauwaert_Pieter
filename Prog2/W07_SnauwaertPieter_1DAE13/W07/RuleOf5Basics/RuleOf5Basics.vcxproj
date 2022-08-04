@@ -21,8 +21,13 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
+<<<<<<<< HEAD:Prog2/W07_SnauwaertPieter_1DAE13/W07/RuleOf5Basics/RuleOf5Basics.vcxproj
     <ProjectGuid>{2f2e95b3-1f33-4e50-8435-0b0938feea8a}</ProjectGuid>
     <RootNamespace>RuleOf5Basics</RootNamespace>
+========
+    <ProjectGuid>{b713de22-a1ec-4649-8534-8041abb73067}</ProjectGuid>
+    <RootNamespace>LevelTest</RootNamespace>
+>>>>>>>> 7631c0be73c829bf733d3446ad5c473196f449b4:Prog2/W03_SnauwaertPieter_1DAE13/W03/LevelTest/LevelTest.vcxproj
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -151,7 +156,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+<<<<<<<< HEAD:Prog2/W07_SnauwaertPieter_1DAE13/W07/RuleOf5Basics/RuleOf5Basics.vcxproj
     <ClCompile Include="Container.cpp" />
+========
+>>>>>>>> 7631c0be73c829bf733d3446ad5c473196f449b4:Prog2/W03_SnauwaertPieter_1DAE13/W03/LevelTest/LevelTest.vcxproj
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
@@ -162,9 +170,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="PowerUp.cpp" />
+    <ClCompile Include="PowerUpManager.cpp" />
     <ClCompile Include="SoundEffect.cpp" />
     <ClCompile Include="SoundStream.cpp" />
-    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="structs.cpp" />
     <ClCompile Include="SVGParser.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -172,14 +181,18 @@
     <ClCompile Include="Vector2f.cpp" />
   </ItemGroup>
   <ItemGroup>
+<<<<<<<< HEAD:Prog2/W07_SnauwaertPieter_1DAE13/W07/RuleOf5Basics/RuleOf5Basics.vcxproj
     <ClInclude Include="Container.h" />
+========
+>>>>>>>> 7631c0be73c829bf733d3446ad5c473196f449b4:Prog2/W03_SnauwaertPieter_1DAE13/W03/LevelTest/LevelTest.vcxproj
     <ClInclude Include="Core.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Matrix2x3.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="PowerUp.h" />
+    <ClInclude Include="PowerUpManager.h" />
     <ClInclude Include="SoundEffect.h" />
     <ClInclude Include="SoundStream.h" />
-    <ClInclude Include="Sprite.h" />
     <ClInclude Include="structs.h" />
     <ClInclude Include="SVGParser.h" />
     <ClInclude Include="Texture.h" />
