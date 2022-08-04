@@ -1,7 +1,6 @@
 #pragma once
 class Ball;
 class Texture;
-using namespace utils;
 class Game final
 {
 public:

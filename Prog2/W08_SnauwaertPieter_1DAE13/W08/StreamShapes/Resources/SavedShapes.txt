@@ -1,0 +1,158 @@
+<DaeEllipse
+   Center="20,40"
+   Width="30"
+   Height="40"
+   Color="1.000000,0.600000,0.070000,1.000000"
+   Center="20,40"
+   Width="30"
+   Height="40"
+   Color="1.000000,0.600000,0.070000,1.000000"
+   IsFilled="true"
+/>
+<DaeEllipse
+   Center="70,42"
+   Width="30"
+   Height="40"
+   Color="1.000000,0.600000,1.000000,1.000000"
+   Center="70,42"
+   Width="30"
+   Height="40"
+   Color="1.000000,0.600000,1.000000,1.000000"
+   IsFilled="false"
+/>
+<DaeEllipse
+   Center="120,45"
+   Width="20"
+   Height="30"
+   Color="0.040000,0.600000,0.780000,1.000000"
+   Center="120,45"
+   Width="20"
+   Height="30"
+   Color="0.040000,0.600000,0.780000,1.000000"
+   IsFilled="true"
+/>
+<DaeEllipse
+   Center="130,45"
+   Width="20"
+   Height="30"
+   Color="0.400000,0.600000,0.780000,1.000000"
+   Center="130,45"
+   Width="20"
+   Height="30"
+   Color="0.400000,0.600000,0.780000,1.000000"
+   IsFilled="false"
+/>
+<DaeEllipse
+   Center="170,45"
+   Width="20"
+   Height="30"
+   Color="0.040000,0.600000,0.780000,1.000000"
+   Center="170,45"
+   Width="20"
+   Height="30"
+   Color="0.040000,0.600000,0.780000,1.000000"
+   IsFilled="true"
+/>
+<DaeEllipse
+   Center="200,50"
+   Width="20"
+   Height="30"
+   Color="1.000000,0.600000,0.070000,1.000000"
+   Center="200,50"
+   Width="20"
+   Height="30"
+   Color="1.000000,0.600000,0.070000,1.000000"
+   IsFilled="false"
+/>
+<DaeEllipse
+   Center="270,50"
+   Width="20"
+   Height="30"
+   Color="1.000000,0.600000,0.070000,1.000000"
+   Center="270,50"
+   Width="20"
+   Height="30"
+   Color="1.000000,0.600000,0.070000,1.000000"
+   IsFilled="true"
+/>
+<DaeEllipse
+   Center="270,100"
+   Width="70"
+   Height="60"
+   Color="1.000000,0.600000,0.070000,1.000000"
+   Center="270,100"
+   Width="70"
+   Height="60"
+   Color="1.000000,0.600000,0.070000,1.000000"
+   IsFilled="true"
+/>
+<DaeEllipse
+   Center="400,70"
+   Width="80"
+   Height="80"
+   Color="0.220000,0.360000,0.150000,1.000000"
+   Center="400,70"
+   Width="80"
+   Height="80"
+   Color="0.220000,0.360000,0.150000,1.000000"
+   IsFilled="true"
+/>
+<DaeEllipse
+   Center="400,70"
+   Width="100"
+   Height="100"
+   Color="0.220000,0.360000,0.150000,1.000000"
+   Center="400,70"
+   Width="100"
+   Height="100"
+   Color="0.220000,0.360000,0.150000,1.000000"
+   IsFilled="false"
+/>
+<DaeRectangle
+   Center="50,285"
+   Width="50"
+   Height="40"
+   Color="1.000000,0.270000,0.310000,1.000000"
+/>
+<DaeRectangle
+   Center="140,285"
+   Width="100"
+   Height="40"
+   Color="1.000000,0.270000,0.310000,1.000000"
+/>
+<DaeRectangle
+   Center="300,210"
+   Width="200"
+   Height="140"
+   Color="1.000000,0.270000,0.000000,1.000000"
+/>
+<DaeRectangle
+   Center="300,210"
+   Width="180"
+   Height="120"
+   Color="0.000000,0.000000,0.000000,1.000000"
+/>
+<DaeRectLabel
+   Center="60,340"
+   Width="100"
+   Height="30"
+   Color="0.780000,0.780000,0.780000,1.000000"
+   Label="60,340"
+   TextColor="0.000000,0.000000,0.000000,1.000000"
+/>
+<DaeRectLabel
+   Center="260,340"
+   Width="100"
+   Height="30"
+   Color="0.390000,0.390000,0.390000,1.000000"
+   Label="260,340"
+   TextColor="1.000000,1.000000,1.000000,1.000000"
+/>
+<DaeRectLabel
+   Center="460,340"
+   Width="100"
+   Height="30"
+   Color="0.350000,0.350000,0.350000,1.000000"
+   Label="460,340"
+   TextColor="1.000000,1.000000,1.000000,1.000000"
+/>

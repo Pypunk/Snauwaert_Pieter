@@ -20,7 +20,7 @@ void Game::Initialize( )
 {
 	for (int i{}; i < m_NumBalls; ++i)
 	{
-		m_pBallPointers[i] = new Ball{ Point2f{GetRand(0.f,m_Window.width),100.f},Vector2f{100.f,100.f},Color4f{1,0,0,1},40 };
+		m_pBallPointers[i] = new Ball{ Point2f{utils::GetRand(0.f,m_Window.width),100.f},Vector2f{100.f,100.f},Color4f{1,0,0,1},40 };
 	}
 	m_pDAETexture = new Texture{ "Resources/DAE.png" };
 	if (!m_pDAETexture->IsCreationOk())
